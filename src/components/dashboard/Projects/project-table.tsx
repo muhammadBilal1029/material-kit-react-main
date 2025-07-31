@@ -44,9 +44,9 @@ export function ProjectTable({
   page = 0,
   rowsPerPage = 0,
 }: CustomersTableProps): React.JSX.Element {
-  const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
-  }, [rows]);
+  // const rowIds = React.useMemo(() => {
+  //   return rows.map((customer) => customer.id);
+  // }, [rows]);
 
  
   return (

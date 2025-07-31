@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { ArrowDownIcon } from '@phosphor-icons/react/dist/ssr/ArrowDown';
-import { ArrowUpIcon } from '@phosphor-icons/react/dist/ssr/ArrowUp';
-import { CurrencyDollarIcon } from '@phosphor-icons/react/dist/ssr/CurrencyDollar';
+// import { ArrowDownIcon } from '@phosphor-icons/react/dist/ssr/ArrowDown';
+// import { ArrowUpIcon } from '@phosphor-icons/react/dist/ssr/ArrowUp';
+// import { CurrencyDollarIcon } from '@phosphor-icons/react/dist/ssr/CurrencyDollar';
 
 export interface BudgetProps {
   diff?: number;
@@ -16,9 +16,9 @@ export interface BudgetProps {
   value: string;
 }
 
-export function Budget({ diff, trend, sx, value }: BudgetProps): React.JSX.Element {
-  const TrendIcon = trend === 'up' ? ArrowUpIcon : ArrowDownIcon;
-  const trendColor = trend === 'up' ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-error-main)';
+export function Budget({  sx, value }: BudgetProps): React.JSX.Element {
+  // const TrendIcon = trend === 'up' ? ArrowUpIcon : ArrowDownIcon;
+  // const trendColor = trend === 'up' ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-error-main)';
 
   return (
     <Card sx={sx}>
