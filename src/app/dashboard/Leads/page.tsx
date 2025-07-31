@@ -3,10 +3,11 @@ import type { Metadata } from 'next';
 
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
+import { dummyLeads } from '@/components/dashboard/Leads/dummyleadsrows';
 import { config } from '@/config';
 import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { LeadsTable } from '@/components/dashboard/Leads/leads-table';
+import dummyLeadsRows from '@/components/dashboard/Leads/dummyleadsrows';
 // import type { Customer } from '@/components/dashboard/Projects/project-table';
 
 export const metadata = { title: `Leads | Dashboard | ${config.site.name}` } satisfies Metadata;
@@ -29,9 +30,9 @@ export default function Page(): React.JSX.Element {
       </Stack>
       <LeadsFilters />
       <LeadsTable
-        // count={paginatedCustomers.length}
+        count={dummyLeads.length}
         page={page}
-        // rows={paginatedCustomers}
+        rows={dummyLeads}
         rowsPerPage={rowsPerPage}
       />
     </Stack>

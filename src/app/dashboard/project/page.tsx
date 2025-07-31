@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 // import { DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
 import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-
+import { dummyRows } from '@/components/dashboard/Projects/dummypropertiesrows';
 
 import { config } from '@/config';
 import { ProjectFilters } from '@/components/dashboard/Projects/project-filters';
@@ -20,7 +20,7 @@ export default function Page(): React.JSX.Element {
   const page = 0;
   const rowsPerPage = 5;
 
-  // const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
+  //  const paginatedCustomers = applyPagination(ProjectTable, page, rowsPerPage);
 
   return (
     <Stack spacing={3}>
@@ -37,9 +37,9 @@ export default function Page(): React.JSX.Element {
       </Stack>
       <ProjectFilters />
       <ProjectTable
-        // count={paginatedCustomers.length}
+       count={dummyRows.length}
         page={page}
-        // rows={paginatedCustomers}
+        rows={dummyRows}
         rowsPerPage={rowsPerPage}
       />
     </Stack>
