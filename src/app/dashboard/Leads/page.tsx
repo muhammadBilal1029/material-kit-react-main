@@ -7,7 +7,7 @@ import { dummyLeads } from '@/components/dashboard/Leads/dummyleadsrows';
 import { config } from '@/config';
 import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { LeadsTable } from '@/components/dashboard/Leads/leads-table';
-import dummyLeadsRows from '@/components/dashboard/Leads/dummyleadsrows';
+// import dummyLeadsRows from '@/components/dashboard/Leads/dummyleadsrows';
 // import type { Customer } from '@/components/dashboard/Projects/project-table';
 
 export const metadata = { title: `Leads | Dashboard | ${config.site.name}` } satisfies Metadata;
