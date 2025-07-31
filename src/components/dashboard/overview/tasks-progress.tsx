@@ -10,7 +10,7 @@ import { ListBulletsIcon } from '@phosphor-icons/react/dist/ssr/ListBullets';
 
 export interface TasksProgressProps {
   sx?: SxProps;
-  value: number;
+  value: string;
 }
 
 export function TasksProgress({ value, sx }: TasksProgressProps): React.JSX.Element {

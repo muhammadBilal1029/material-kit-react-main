@@ -43,7 +43,7 @@ export default function Page(): React.JSX.Element {
           xs: 12,
         }}
       >
-        <TasksProgress sx={{ height: '100%' }} value={50000} />
+        <TasksProgress sx={{ height: '100%' }} value="50k" />
       </Grid>
       <Grid
         size={{
