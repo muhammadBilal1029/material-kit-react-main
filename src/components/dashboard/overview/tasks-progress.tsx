@@ -30,7 +30,7 @@ export function TasksProgress({ value, sx }: TasksProgressProps): React.JSX.Elem
             </Avatar>
           </Stack>
           <div>
-            <LinearProgress value={value} variant="determinate" />
+            <LinearProgress value={parseInt(value)} variant="determinate" />
           </div>
         </Stack>
       </CardContent>
