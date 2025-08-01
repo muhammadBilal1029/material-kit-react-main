@@ -28,9 +28,9 @@ export interface SignUpBusinessParams {
   categoryName: string;
   startDate: string; // format: YYYY-MM-DD (e.g., '2025-08-01')
   currency: string;
-  logo?: File | string; // File for upload or URL if already uploaded
+  logo?: string; // File for upload or URL if already uploaded
   website?: string;
-  businessContact: string;
+  phoneNumber: string;
 
   // Location
   country: string;
@@ -123,7 +123,7 @@ class AuthClient {
   currency: _.currency,
   logo: _.logo,
   website: _.website,
-  businessContact: _.businessContact,
+  phoneNumber: _.phoneNumber,
 
   // Location
   country: _.country,

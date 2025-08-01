@@ -32,7 +32,7 @@ export const schema = z
 		logo: z.any().optional(), // Adjust this if you want to enforce a File or string
 
 		website: z.string().url().optional(),
-		businessContact: z.string().min(1, { message: "Business contact is required" }),
+		phoneNumber: z.string().min(1, { message: "Business contact is required" }),
 
 		country: z.string().min(1, { message: "Country is required" }),
 		state: z.string().min(1, { message: "State is required" }),
@@ -67,10 +67,9 @@ const defaultValues = {
 	categoryName: "",
 	startDate: "", // e.g., '2025-08-01'
 	currency: "",
-	logo: undefined,
+	logo: "",
 	website: "",
-	businessContact: "",
-
+	phoneNumber: "",
 	country: "",
 	state: "",
 	city: "",
@@ -105,11 +104,36 @@ export function SignUpBussinessForm(): React.JSX.Element {
 		formState: { errors },
 	} = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
+    const convertToBase64 = (file: File): Promise<string> =>
+	new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = (error) => reject(error);
+	});
+
 	const onSubmit = React.useCallback(
 		async (values: Values): Promise<void> => {
 			setIsPending(true);
+let base64Logo = "";
+if (values.logo instanceof File) {
+			try {
+				base64Logo = await convertToBase64(values.logo);
+			} catch (error) {
+				console.error("Failed to convert logo to base64:", error);
+				setError("logo", { type: "manual", message: "Logo upload failed" });
+				setIsPending(false);
+				return;
+			}
+		} else if (typeof values.logo === "string") {
+			base64Logo = values.logo;
+		}
 
-			const { error } = await authClient.signUpwithbusiness(values);
+		const payload = {
+			...values,
+			logo: base64Logo,
+		};
+			const { error } = await authClient.signUpwithbusiness(payload);
 
 			if (error) {
 				setError("root", { type: "server", message: error });
@@ -258,13 +282,13 @@ export function SignUpBussinessForm(): React.JSX.Element {
 					{/* Business Contact */}
 					<Controller
 						control={control}
-						name="businessContact"
+						name="phoneNumber"
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Business Contact"
-								error={!!errors.businessContact}
-								helperText={errors.businessContact?.message}
+								label="Phone Number"
+								error={!!errors.phoneNumber}
+								helperText={errors.phoneNumber?.message}
 							/>
 						)}
 					/>
