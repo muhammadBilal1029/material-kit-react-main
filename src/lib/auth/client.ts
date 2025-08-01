@@ -75,7 +75,7 @@ class AuthClient {
   async signUp(_: SignUpParams): Promise<{ error?: string }> {
     // Make API request
     try {
-      const response = await fetch('http://localhost:5000/auth/users/admin-register', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users/admin-register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,29 +111,57 @@ class AuthClient {
   async signUpwithbusiness(_: SignUpBusinessParams): Promise<{ error?: string }> {
     // Make API request
     try {
-      const response = await fetch(`${process.env.BackendURL}/auth/users/admin-register`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users/vendor-register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: _.username,
-          email: _.email,
-          password: _.password,
-          confirmPassword: _.confirmPassword,
-         
-        }),
+       body: JSON.stringify({
+  businessName: _.businessName,
+  categoryName: _.categoryName,
+  startDate: _.startDate,
+  currency: _.currency,
+  logo: _.logo,
+  website: _.website,
+  businessContact: _.businessContact,
+
+  // Location
+  country: _.country,
+  state: _.state,
+  city: _.city,
+  postalCode: _.postalCode,
+
+  // Details
+  companyDetails: _.companyDetails,
+  username: _.username,
+  email: _.email,
+
+  // Social Media Links
+  facebookLink: _.facebookLink,
+  instagramLink: _.instagramLink,
+  linkedinLink: _.linkedinLink,
+  youtubeLink: _.youtubeLink,
+  twitterLink: _.twitterLink,
+
+  // Authentication
+  password: _.password,
+  confirmPassword: _.confirmPassword,
+
+  // Terms
+  acceptTerms: _.acceptTerms
+}),
+
       });
       const data = await response.json();
      
       if (!response.ok) {
-        throw new Error(data.error || 'Sign up failed');
+        throw new Error(data.error || 'Sign up bussiness failed');
       }
       const token= data.token;
       localStorage.setItem('auth-token', token);
       localStorage.setItem('user', JSON.stringify(data.user));
     } catch (_err) {
-      return { error: 'Sign up failed' };
+      return { error: 'Sign up business failed' };
     }
     // We do not handle the API, so we'll just generate a token and store it in localStorage.
     
