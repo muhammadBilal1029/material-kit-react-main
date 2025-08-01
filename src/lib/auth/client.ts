@@ -170,7 +170,7 @@ try {
   // For example: localStorage.setItem('token', data.token);
 
 
-} catch (err) {
+} catch (_err) {
  
   return { error: 'Invalid credentials' };
 }
