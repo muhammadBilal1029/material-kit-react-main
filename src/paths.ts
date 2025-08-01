@@ -3,11 +3,12 @@ export const paths = {
   auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up', resetPassword: '/auth/reset-password' },
   dashboard: {
     overview: '/dashboard',
-    account: '/dashboard/account',
+    news: '/dashboard/news',
     Leads: '/dashboard/Leads',
     project: '/dashboard/project',
+    addproject: '/dashboard/project/addproject',
     properties: '/dashboard/properties',
-    settings: '/dashboard/settings',
+    jobs: '/dashboard/jobs',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

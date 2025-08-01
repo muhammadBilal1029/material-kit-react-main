@@ -2,13 +2,23 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+// import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ClockIcon } from '@phosphor-icons/react/dist/ssr/Clock';
-import { DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
+// import { ClockIcon } from '@phosphor-icons/react/dist/ssr/Clock';
+// import { DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
+
+function noop(): void {
+  // do nothing
+}
 
 export interface PropertiesCard {
   id: string;
@@ -19,43 +29,81 @@ export interface PropertiesCard {
   updatedAt: Date;
 }
 
-export interface IntegrationCardProps {
-  integration: PropertiesCard;
+interface CustomersTableProps {
+  count?: number;
+  page?: number;
+  rows?: PropertiesCard[];
+  rowsPerPage?: number;
 }
 
-export function PropertiesCard({ integration }: IntegrationCardProps): React.JSX.Element {
+export function PropertiesCard({
+  count = 0,
+  rows = [],
+  page = 0,
+  rowsPerPage = 0,
+}: CustomersTableProps): React.JSX.Element  {
   return (
-    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <CardContent sx={{ flex: '1 1 auto' }}>
-        <Stack spacing={2}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Avatar src={integration.logo} variant="square" />
-          </Box>
-          <Stack spacing={1}>
-            <Typography align="center" variant="h5">
-              {integration.title}
-            </Typography>
-            <Typography align="center" variant="body1">
-              {integration.description}
-            </Typography>
-          </Stack>
-        </Stack>
-      </CardContent>
+<Card>
+      <Box sx={{ overflowX: 'auto' }}>
+        <Table sx={{ minWidth: '800px' }}>
+          <TableHead>
+            <TableRow>
+             
+              <TableCell>ID</TableCell>
+              <TableCell>Title</TableCell>
+            
+              <TableCell>Description</TableCell>
+              <TableCell>Logo</TableCell>
+              <TableCell>Installs</TableCell>
+              <TableCell>Update At</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => {
+            
+
+              return (
+                <TableRow hover key={row.id} >
+                 
+                  <TableCell>
+                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                      <Avatar src={row.logo} />
+                      <Typography variant="subtitle2">{row.id}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>
+                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                      <Avatar src={row.logo} />
+                      <Typography variant="subtitle2">{row.title}</Typography>
+                    </Stack>
+                  </TableCell>
+              
+                  <TableCell>
+                    <Typography variant="body2">{row.description}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                      <Avatar src={row.logo} />
+                      <Typography variant="subtitle2">{row.logo}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>{dayjs(row.updatedAt).format('MMM D, YYYY')}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Box>
       <Divider />
-      <Stack direction="row" spacing={2} sx={{ alignItems: 'center', justifyContent: 'space-between', p: 2 }}>
-        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
-          <ClockIcon fontSize="var(--icon-fontSize-sm)" />
-          <Typography color="text.secondary" display="inline" variant="body2">
-            Updated {dayjs(integration.updatedAt).format('MMM D, YYYY')}
-          </Typography>
-        </Stack>
-        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
-          <DownloadIcon fontSize="var(--icon-fontSize-sm)" />
-          <Typography color="text.secondary" display="inline" variant="body2">
-            {integration.installs} installs
-          </Typography>
-        </Stack>
-      </Stack>
+      <TablePagination
+        component="div"
+        count={count}
+        onPageChange={noop}
+        onRowsPerPageChange={noop}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
     </Card>
   );
 }

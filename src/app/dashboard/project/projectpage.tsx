@@ -1,0 +1,48 @@
+'use client';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+// import { DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
+import { PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
+import { dummyRows } from "@/components/dashboard/Projects/dummyprojectsrows";
+import { ProjectFilters } from "@/components/dashboard/Projects/project-filters";
+import { ProjectTable } from "@/components/dashboard/Projects/project-table";
+
+// import type { Customer } from '@/components/dashboard/Projects/project-table';
+
+import { useRouter } from 'next/navigation';
+
+
+export default function Page(): React.JSX.Element {
+    const router = useRouter();
+	const page = 0;
+	const rowsPerPage = 5;
+
+	//  const paginatedCustomers = applyPagination(ProjectTable, page, rowsPerPage);
+
+	return (
+		<Stack spacing={3}>
+			<Stack direction="row" spacing={3}>
+				<Stack spacing={1} sx={{ flex: "1 1 auto" }}>
+					<Typography variant="h4">Projects</Typography>
+				</Stack>
+				<div>
+					<Button
+					onClick={() => router.push('/dashboard/project/addproject')}
+						startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
+						variant="contained"
+					>
+						Add
+					</Button>
+				</div>
+			</Stack>
+			<ProjectFilters />
+			<ProjectTable count={dummyRows.length} page={page} rows={dummyRows} rowsPerPage={rowsPerPage} />
+		</Stack>
+	);
+}
+
+// function applyPagination(rows: Customer[], page: number, rowsPerPage: number): Customer[] {
+//   return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+// }
