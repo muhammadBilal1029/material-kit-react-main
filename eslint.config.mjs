@@ -7,7 +7,7 @@ import pluginReact from "eslint-plugin-react";
 import pluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import ts from "typescript-eslint";
-
+import unicorn from 'eslint-plugin-unicorn';
 const compat = new FlatCompat();
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -24,6 +24,9 @@ export default [
 	js.configs.recommended,
 	...ts.configs.recommended,
 	{
+		 plugins: {
+      unicorn, // ✅ make sure it's included
+    },
 		rules: {
 			"@typescript-eslint/no-unused-vars": [
 				"error",
@@ -36,7 +39,7 @@ export default [
 			],
 			"@typescript-eslint/no-empty-object-type": "off",
 			"unicorn/prefer-optional-catch-binding": "off",
-  "unicorn/catch-error-name": "off"
+            "unicorn/catch-error-name": "off"
 		},
 	},
 	configPrettier,
