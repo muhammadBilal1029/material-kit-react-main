@@ -8,13 +8,13 @@ function generateToken(): string {
   return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
 }
 
-const user = {
-  id: 'USR-000',
-  avatar: '/assets/avatar.png',
-  firstName: 'Sofia',
-  lastName: 'Rivers',
-  email: 'sofia@devias.io',
-} satisfies User;
+// const user = {
+//   id: 'USR-000',
+//   avatar: '/assets/avatar.png',
+//   firstName: 'Sofia',
+//   lastName: 'Rivers',
+//   email: 'sofia@devias.io',
+// } satisfies User;
 
 export interface SignUpParams {
   username: string;

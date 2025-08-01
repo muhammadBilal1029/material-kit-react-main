@@ -35,6 +35,8 @@ export default [
 				},
 			],
 			"@typescript-eslint/no-empty-object-type": "off",
+			"unicorn/prefer-optional-catch-binding": "off",
+  "unicorn/catch-error-name": "off"
 		},
 	},
 	configPrettier,

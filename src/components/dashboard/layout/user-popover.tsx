@@ -25,7 +25,7 @@ export interface UserPopoverProps {
 
 export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): React.JSX.Element {
   const { checkSession } = useUser();
-      const { data, error } =  authClient.getUser();
+      const { data } =  authClient.getUser();
   
   const router = useRouter();
 
