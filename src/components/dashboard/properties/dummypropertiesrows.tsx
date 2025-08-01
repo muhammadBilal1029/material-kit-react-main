@@ -11,7 +11,7 @@ export const dummyRows = [
     description: 'A sample project description',
     logo: 'https://i.pravatar.cc/40?img=1',
     installs: 100,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(),
   },
   {
     id: '2',
@@ -19,7 +19,7 @@ export const dummyRows = [
     title: 'Jane Smith',
     description: 'A sample project description',
     installs: 200,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(),
   },
   {
     id: '3',
@@ -27,7 +27,7 @@ export const dummyRows = [
     title: 'Ali Khan',
     description: 'A sample project description',
     installs: 300,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(),
   },
 ];
 
