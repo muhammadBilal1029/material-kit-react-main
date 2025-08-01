@@ -56,6 +56,9 @@ importers:
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       jspdf:
         specifier: ^3.0.1
         version: 3.0.1
@@ -78,7 +81,7 @@ importers:
         specifier: ^0.18.5
         version: 0.18.5
       zod:
-        specifier: 3.25.57
+        specifier: ^3.25.57
         version: 3.25.57
     devDependencies:
       '@eslint/eslintrc':
@@ -1726,6 +1729,10 @@ packages:
 
   dompurify@3.2.6:
     resolution: {integrity: sha512-/2GogDQlohXPZe6D6NOgQvXLPSYBqIWMnZ8zzOhn09REE4eyAzb+Hed3jhoM9OkuaJ8P6ZGTTVWQKAi8ieIzfQ==}
+
+  dotenv@17.2.1:
+    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -5221,6 +5228,8 @@ snapshots:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
     optional: true
+
+  dotenv@17.2.1: {}
 
   dunder-proto@1.0.1:
     dependencies:
