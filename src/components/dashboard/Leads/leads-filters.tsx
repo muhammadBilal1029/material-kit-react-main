@@ -4,7 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import Button from '@mui/material/Button';
-import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+// import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 export function LeadsFilters(): React.JSX.Element {
   return (
     <Card sx={{ p: 2 }}>
