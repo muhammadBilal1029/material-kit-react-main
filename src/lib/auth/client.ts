@@ -98,6 +98,7 @@ class AuthClient {
       localStorage.setItem('user', JSON.stringify(data.user));
     } catch (_err) {
       return { error: 'Sign up failed' };
+      
     }
     // We do not handle the API, so we'll just generate a token and store it in localStorage.
     
