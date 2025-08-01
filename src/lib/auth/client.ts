@@ -2,7 +2,7 @@
 
 import type { User } from '@/types/user';
 
-function generateToken(): string {
+function _generateToken(): string {
   const arr = new Uint8Array(12);
   globalThis.crypto.getRandomValues(arr);
   return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
@@ -96,7 +96,7 @@ class AuthClient {
       const token= data.token;
       localStorage.setItem('auth-token', token);
       localStorage.setItem('user', JSON.stringify(data.user));
-    } catch (err) {
+    } catch (_err) {
       return { error: 'Sign up failed' };
     }
     // We do not handle the API, so we'll just generate a token and store it in localStorage.
@@ -132,7 +132,7 @@ class AuthClient {
       const token= data.token;
       localStorage.setItem('auth-token', token);
       localStorage.setItem('user', JSON.stringify(data.user));
-    } catch (err) {
+    } catch (_err) {
       return { error: 'Sign up failed' };
     }
     // We do not handle the API, so we'll just generate a token and store it in localStorage.
