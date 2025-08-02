@@ -31,25 +31,27 @@ function noop(): void {
 
 export interface Customer {
   id: string;
-  project:string;
-  name: string;
+  storeName: string;
   email:string;
-  address: { city: string; state: string; country: string; street: string };
+  address: string;
   category: string;
-  searchcategory: string;
+  projectCategory: string;
   phone: number;
-  map:string;
-  Ratings:string;
-  Stars:string;
-  Reviews:string;
-  Website:string;
-  Facebook:string;
-  LinkedIn:string;
-  Instagram:string;
-  YouTube:string;
-  Logo:string;
-  Image:string;
-  Action:string;
+  googleUrl:string;
+  ratingText:string;
+  stars:string;
+  numberOfReviews:string;
+  about:string;
+  bizWebsite:string;
+  socialLinks: {
+    youtube: String,
+    instagram: String,
+    facebook: String,
+    linkedin: String,
+  },
+  logoUrl: String;
+  imageUrl:string;
+  action:string;
 }
 
 interface CustomersTableProps {
@@ -71,7 +73,7 @@ export function LeadsTable({
 //     return rows.map((customer) => customer.id);
 //   }, [rows]);
 
- 
+    let index=1;
   return (
     <Card >
    <TableContainer
@@ -86,7 +88,7 @@ export function LeadsTable({
             <TableRow>
               
               <TableCell>ID</TableCell>
-              <TableCell>Project</TableCell>
+            
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
             
@@ -94,10 +96,11 @@ export function LeadsTable({
               <TableCell>Category</TableCell>
               <TableCell>Search Category</TableCell>
               <TableCell>Phone</TableCell>
-              <TableCell>Map</TableCell>
+              <TableCell>Google Map</TableCell>
               <TableCell>Ratings</TableCell>
               <TableCell>Stars</TableCell>
               <TableCell>Reviews</TableCell>
+                <TableCell>About</TableCell>
               <TableCell>Website</TableCell>
               <TableCell>Facebook</TableCell>
               <TableCell>LinkedIn</TableCell>
@@ -110,37 +113,39 @@ export function LeadsTable({
             </TableRow>
           </TableHead>
 <TableBody>
+  
   {Array.isArray(rows) && rows.length > 0 ? (
     rows.map((row) => {
-      let index=1;
+   
       return(
-        <TableRow hover key={index++}>
+        <TableRow hover key={index}>
         <TableCell>{index++}</TableCell>
-        <TableCell>{row.project}</TableCell>
+       
         <TableCell>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-            <Typography variant="subtitle2">{row.name}</Typography>
+            <Typography variant="subtitle2">{row.storeName}</Typography>
           </Stack>
         </TableCell>
         <TableCell>{row.email}</TableCell>
         <TableCell>
-          {row.address?.city}, {row.address?.state}, {row.address?.country}
+          {row.address}
         </TableCell>
         <TableCell>{row.category}</TableCell>
-        <TableCell>{row.searchcategory}</TableCell>
+        <TableCell>{row.projectCategory}</TableCell>
         <TableCell>{row.phone}</TableCell>
-        <TableCell>{row.map}</TableCell>
-        <TableCell>{row.Ratings}</TableCell>
-        <TableCell>{row.Stars}</TableCell>
-        <TableCell>{row.Reviews}</TableCell>
-        <TableCell>{row.Website}</TableCell>
-        <TableCell>{row.Facebook}</TableCell>
-        <TableCell>{row.LinkedIn}</TableCell>
-        <TableCell>{row.Instagram}</TableCell>
-        <TableCell>{row.YouTube}</TableCell>
-        <TableCell>{row.Logo}</TableCell>
-        <TableCell>{row.Image}</TableCell>
-        <TableCell>{row.Action}</TableCell>
+        <TableCell>{row.googleUrl}</TableCell>
+        <TableCell>{row.ratingText}</TableCell>
+        <TableCell>{row.stars}</TableCell>
+        <TableCell>{row.numberOfReviews}</TableCell>
+        <TableCell>{row.about}</TableCell>
+        <TableCell>{row.bizWebsite}</TableCell>
+        <TableCell>{row.socialLinks.facebook}</TableCell>
+        <TableCell>{row.socialLinks.linkedin}</TableCell>
+        <TableCell>{row.socialLinks.instagram}</TableCell>
+        <TableCell>{row.socialLinks.youtube}</TableCell>
+        <TableCell>{row.logoUrl}</TableCell>
+        <TableCell>{row.imageUrl}</TableCell>
+        <TableCell>{row.action}</TableCell>
       </TableRow>
       )
     })
