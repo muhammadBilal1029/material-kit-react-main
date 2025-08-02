@@ -4,11 +4,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 // import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 export function LeadsFilters(): React.JSX.Element {
   return (
     <Card sx={{ p: 2 }}>
-
+  <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={1}
+        alignItems={{ xs: 'stretch', sm: 'center' }}
+      >
       <OutlinedInput
         defaultValue=""
         fullWidth
@@ -21,7 +26,7 @@ export function LeadsFilters(): React.JSX.Element {
         sx={{ maxWidth: '400px' }}
       />
     
-                <Button  variant="contained" sx={{ ml: 2 }}>
+                <Button  className='sm:flex' variant="contained" sx={{ ml: 2 }}>
                   Export To CSV
                 </Button>
                 <Button  variant="contained" sx={{ ml: 2 }}>
@@ -31,7 +36,7 @@ export function LeadsFilters(): React.JSX.Element {
                 <Button variant="contained" sx={{ ml: 2 }}>
                   Export To Excel
                 </Button>
-              
+              </Stack>
     </Card>
   );
 }

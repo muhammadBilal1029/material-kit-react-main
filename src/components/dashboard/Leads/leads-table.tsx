@@ -3,6 +3,8 @@
 import * as React from 'react';
 // import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+// import CircularProgress from '@mui/material/CircularProgress';
+
 import Card from '@mui/material/Card';
 // import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
@@ -14,6 +16,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+// import CircularProgress from '@mui/material/CircularProgress';
+import DotLoader from 'react-spinners/DotLoader';
+import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
 // import dayjs from 'dayjs';
 
 // import { useSelection } from '@/hooks/use-selection';
@@ -51,6 +57,7 @@ interface CustomersTableProps {
   page?: number;
   rows?: Customer[];
   rowsPerPage?: number;
+  loading?: boolean;
 }
 
 export function LeadsTable({
@@ -58,6 +65,7 @@ export function LeadsTable({
   rows = [],
   page = 0,
   rowsPerPage = 0,
+  loading = false,
 }: CustomersTableProps): React.JSX.Element {
 //   const rowIds = React.useMemo(() => {
 //     return rows.map((customer) => customer.id);
@@ -65,9 +73,15 @@ export function LeadsTable({
 
  
   return (
-    <Card>
-      <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
+    <Card >
+   <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '50vh', // Set your desired height here
+        overflow: 'auto'
+      }}
+    >
+        <Table sx={{ minWidth: '800px'}} stickyHeader>
           <TableHead>
             <TableRow>
               
@@ -95,46 +109,49 @@ export function LeadsTable({
             
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-            
+<TableBody>
+  {Array.isArray(rows) && rows.length > 0 ? (
+    rows.map((row) => (
+      <TableRow hover key={row.id}>
+        <TableCell>{row.id}</TableCell>
+        <TableCell>{row.project}</TableCell>
+        <TableCell>
+          <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+            <Typography variant="subtitle2">{row.name}</Typography>
+          </Stack>
+        </TableCell>
+        <TableCell>{row.email}</TableCell>
+        <TableCell>
+          {row.address?.city}, {row.address?.state}, {row.address?.country}
+        </TableCell>
+        <TableCell>{row.category}</TableCell>
+        <TableCell>{row.searchcategory}</TableCell>
+        <TableCell>{row.phone}</TableCell>
+        <TableCell>{row.map}</TableCell>
+        <TableCell>{row.Ratings}</TableCell>
+        <TableCell>{row.Stars}</TableCell>
+        <TableCell>{row.Reviews}</TableCell>
+        <TableCell>{row.Website}</TableCell>
+        <TableCell>{row.Facebook}</TableCell>
+        <TableCell>{row.LinkedIn}</TableCell>
+        <TableCell>{row.Instagram}</TableCell>
+        <TableCell>{row.YouTube}</TableCell>
+        <TableCell>{row.Logo}</TableCell>
+        <TableCell>{row.Image}</TableCell>
+        <TableCell>{row.Action}</TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={20} align="center">
+        No data found
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
 
-              return (
-                <TableRow hover key={row.id} >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.project}</TableCell>
-                  <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Typography variant="subtitle2">{row.name}</Typography>
-                    </Stack>
-                  </TableCell>
-                     <TableCell>{row.email}</TableCell>
-                 
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
-
-                  <TableCell>{row.category}</TableCell>
-                  <TableCell>{row.searchcategory}</TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.map}</TableCell>
-                  <TableCell>{row.Ratings}</TableCell>
-                  <TableCell>{row.Stars}</TableCell>
-                  <TableCell>{row.Reviews}</TableCell>
-                  <TableCell>{row.Website}</TableCell>
-                  <TableCell>{row.Facebook}</TableCell>
-                  <TableCell>{row.LinkedIn}</TableCell>
-                  <TableCell>{row.Instagram}</TableCell>
-                  <TableCell>{row.YouTube}</TableCell>
-                  <TableCell>{row.Logo}</TableCell>
-                  <TableCell>{row.Image}</TableCell>
-                  <TableCell>{row.Action}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
         </Table>
-      </Box>
+      </TableContainer>
       <Divider />
       <TablePagination
         component="div"
