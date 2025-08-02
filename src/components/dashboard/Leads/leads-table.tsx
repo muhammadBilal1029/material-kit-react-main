@@ -111,9 +111,11 @@ export function LeadsTable({
           </TableHead>
 <TableBody>
   {Array.isArray(rows) && rows.length > 0 ? (
-    rows.map((row) => (
-      <TableRow hover key={row.id}>
-        <TableCell>{row.id}</TableCell>
+    rows.map((row) => {
+      let index=1;
+      return(
+        <TableRow hover key={index++}>
+        <TableCell>{index++}</TableCell>
         <TableCell>{row.project}</TableCell>
         <TableCell>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
@@ -140,7 +142,8 @@ export function LeadsTable({
         <TableCell>{row.Image}</TableCell>
         <TableCell>{row.Action}</TableCell>
       </TableRow>
-    ))
+      )
+    })
   ) : (
     <TableRow>
       <TableCell colSpan={20} align="center">
