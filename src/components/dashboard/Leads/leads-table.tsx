@@ -139,10 +139,10 @@ export function LeadsTable({
         <TableCell>{row.numberOfReviews}</TableCell>
         <TableCell>{row.about}</TableCell>
         <TableCell>{row.bizWebsite}</TableCell>
-        <TableCell>{row.socialLinks.facebook}</TableCell>
-        <TableCell>{row.socialLinks.linkedin}</TableCell>
-        <TableCell>{row.socialLinks.instagram}</TableCell>
-        <TableCell>{row.socialLinks.youtube}</TableCell>
+        <TableCell>{row.socialLinks?.facebook || 'N/A'}</TableCell>
+        <TableCell>{row.socialLinks?.linkedin || 'N/A'}</TableCell>
+        <TableCell>{row.socialLinks?.instagram || 'N/A'}</TableCell>
+        <TableCell>{row.socialLinks?.youtube || 'N/A'}</TableCell>
         <TableCell>{row.logoUrl}</TableCell>
         <TableCell>{row.imageUrl}</TableCell>
         <TableCell>{row.action}</TableCell>
