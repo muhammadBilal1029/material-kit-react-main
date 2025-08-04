@@ -11,6 +11,8 @@ import { Customer, LeadsTable } from '@/components/dashboard/Leads/leads-table';
 // import dummyLeadsRows from '@/components/dashboard/Leads/dummyleadsrows';
 // import type { Customer } from '@/components/dashboard/Projects/project-table';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { useUser } from '@/hooks/use-user';
 
 export default function Page(): React.JSX.Element {
   const router = useRouter();
@@ -20,13 +22,16 @@ export default function Page(): React.JSX.Element {
   // const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
   const [leads, setLeads] = React.useState<Customer[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  const { checkSession } = useUser();
+
    React.useEffect(() => {
     // Replace this with your real API call
     const token = localStorage.getItem("auth-token");
     if (!token) {
       console.error('No auth token found');
       setLoading(false);
-      router.replace('/login'); // Redirect to login if no token
+      router.replace('/auth/sign-in'); // Redirect to login if no token
       return;
     }
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
@@ -34,11 +39,27 @@ export default function Page(): React.JSX.Element {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        setLeads(data.data	);
+      .then(async (res) => {
+      const data = await res.json();
+
+      // Check for token expiry message
+      if (data?.msg === 'Token Expired. Please log in again.') {
+        toast.error('Session expired. Please login again.');
+        localStorage.removeItem('auth-token');
+        await checkSession?.();
+        router.refresh();
         setLoading(false);
-      })
+        return;
+      }
+
+      if (!res.ok) {
+          setLoading(false);
+        return;
+      }
+
+      setLeads(data.data);
+        setLoading(false);
+    })
       .catch((err) => {
         console.error('Failed to fetch leads:', err);
         setLoading(false);
@@ -59,7 +80,7 @@ export default function Page(): React.JSX.Element {
     <span></span>
     <span></span>
   </div>
-  ) : leads.length === 0 ? (
+  )  : !Array.isArray(leads) || leads.length === 0 ? (
   <Typography variant="subtitle1" sx={{ textAlign: 'center', mt: 4 }}>
     No data found
   </Typography>

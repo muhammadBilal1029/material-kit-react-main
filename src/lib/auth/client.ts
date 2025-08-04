@@ -240,7 +240,7 @@ try {
 
   async signOut(): Promise<{ error?: string }> {
     localStorage.removeItem('auth-token');
-
+    localStorage.removeItem('user');
     return {};
   }
 }

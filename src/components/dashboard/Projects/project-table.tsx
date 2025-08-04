@@ -25,9 +25,9 @@ function noop(): void {
 export interface Customer {
   id: string;
   avatar: string;
-  name: string;
-  address: { city: string; state: string; country: string; street: string };
-  category: string;
+  projectName: string;
+  city: string;
+  businessCategory: string;
   status: string;
 }
 
@@ -58,8 +58,8 @@ export function ProjectTable({
              
               <TableCell>Name</TableCell>
             
-              <TableCell>Location</TableCell>
-              <TableCell>Category</TableCell>
+              <TableCell>City</TableCell>
+              <TableCell>businessCategory</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -73,15 +73,15 @@ export function ProjectTable({
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                       <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
+                      <Typography variant="subtitle2">{row.projectName}</Typography>
                     </Stack>
                   </TableCell>
               
                   <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
+                  {row.city}
                   </TableCell>
-                  <TableCell>{row.category}</TableCell>
-                  <TableCell>{dayjs(row.status).format('MMM D, YYYY')}</TableCell>
+                  <TableCell>{row.businessCategory}</TableCell>
+                  <TableCell>{row.status}</TableCell>
                 </TableRow>
               );
             })}
