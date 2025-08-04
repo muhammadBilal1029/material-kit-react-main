@@ -10,7 +10,10 @@ import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from '@/components/dashboard/Leads/leads-table';
 // import dummyLeadsRows from '@/components/dashboard/Leads/dummyleadsrows';
 // import type { Customer } from '@/components/dashboard/Projects/project-table';
+import { useRouter } from 'next/navigation';
+
 export default function Page(): React.JSX.Element {
+  const router = useRouter();
   const page = 0;
   const rowsPerPage = 5;
   // 
@@ -20,6 +23,12 @@ export default function Page(): React.JSX.Element {
    React.useEffect(() => {
     // Replace this with your real API call
     const token = localStorage.getItem("auth-token");
+    if (!token) {
+      console.error('No auth token found');
+      setLoading(false);
+      router.push('/login'); // Redirect to login if no token
+      return;
+    }
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,7 +43,7 @@ export default function Page(): React.JSX.Element {
         console.error('Failed to fetch leads:', err);
         setLoading(false);
       });
-  }, []);
+  }, [router]);
 
   return (
     <Stack spacing={3}>
