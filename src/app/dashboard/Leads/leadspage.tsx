@@ -26,7 +26,7 @@ export default function Page(): React.JSX.Element {
     if (!token) {
       console.error('No auth token found');
       setLoading(false);
-      router.push('/login'); // Redirect to login if no token
+      router.replace('/login'); // Redirect to login if no token
       return;
     }
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
