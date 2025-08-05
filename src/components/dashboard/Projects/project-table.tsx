@@ -14,8 +14,9 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-
+import Button from '@mui/material/Button';
+// import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 // import { useSelection } from '@/hooks/use-selection';
 
 function noop(): void {
@@ -23,32 +24,42 @@ function noop(): void {
 }
 
 export interface Customer {
-  id: string;
+   _id: string;
+  projectId: string; 
   avatar: string;
   projectName: string;
   city: string;
   businessCategory: string;
-  status: string;
+   status: 'Running' | 'Finished' | string;
 }
 
 interface CustomersTableProps {
-  count?: number;
+  count: number;
   page?: number;
-  rows?: Customer[];
+  rows: Customer[];
   rowsPerPage?: number;
+   onPageChange: (_: any, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onCancel?: (_id: string) => void;
 }
 
 export function ProjectTable({
-  count = 0,
-  rows = [],
-  page = 0,
-  rowsPerPage = 0,
+  rows,
+  count,
+  page,
+  rowsPerPage,
+  onPageChange,
+  onRowsPerPageChange,
+  onCancel
 }: CustomersTableProps): React.JSX.Element {
   // const rowIds = React.useMemo(() => {
   //   return rows.map((customer) => customer.id);
   // }, [rows]);
+const router = useRouter();
+const handleViewLeads = async (row: Customer) => {
+   router.push(`/dashboard/project/specific-leads?category=${encodeURIComponent(row.businessCategory)}`);
+};
 
- 
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -61,6 +72,7 @@ export function ProjectTable({
               <TableCell>City</TableCell>
               <TableCell>businessCategory</TableCell>
               <TableCell>Status</TableCell>
+               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -68,7 +80,7 @@ export function ProjectTable({
             
 
               return (
-                <TableRow hover key={row.id} >
+                <TableRow hover key={row._id} >
                  
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
@@ -82,6 +94,33 @@ export function ProjectTable({
                   </TableCell>
                   <TableCell>{row.businessCategory}</TableCell>
                   <TableCell>{row.status}</TableCell>
+                   <TableCell>
+                {row.status === 'Running' ? (
+  <Button
+    variant="outlined"
+    color="error"
+    size="small"
+    onClick={() => onCancel?.(row.projectId)}
+  >
+    Cancel
+  </Button>
+) : row.status === 'Finished' ? (
+  <Button
+    variant="contained"
+    size="small"
+    onClick={() => handleViewLeads(row)}
+  >
+    View Leads
+  </Button>
+) : row.status === 'Cancelled' ? (
+  <Typography color="error" variant="body2">
+    Cancelled
+  </Typography>
+) : (
+  '-'
+)}
+
+                </TableCell>
                 </TableRow>
               );
             })}
@@ -89,15 +128,15 @@ export function ProjectTable({
         </Table>
       </Box>
       <Divider />
-      <TablePagination
-        component="div"
-        count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+     
+     <TablePagination
+  component="div"
+  count={count ?? 0}
+  page={page ?? 0}
+  onPageChange={onPageChange}
+  rowsPerPage={rowsPerPage ?? 10}
+  onRowsPerPageChange={onRowsPerPageChange}
+/>
     </Card>
   );
 }

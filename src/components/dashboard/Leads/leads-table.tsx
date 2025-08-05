@@ -44,14 +44,15 @@ export interface Customer {
   about:string;
   bizWebsite:string;
   socialLinks: {
-    youtube: String,
-    instagram: String,
-    facebook: String,
-    linkedin: String,
+    youtube: string,
+    instagram: string,
+    facebook: string,
+    linkedin: string,
   },
-  logoUrl: String;
+  logoUrl: string;
   imageUrl:string;
   action:string;
+  [key: string]: any;
 }
 
 interface CustomersTableProps {
@@ -59,6 +60,8 @@ interface CustomersTableProps {
   page?: number;
   rows?: Customer[];
   rowsPerPage?: number;
+    onPageChange: (_: any, newPage: number) => void;
+    onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   loading?: boolean;
 }
 
@@ -67,6 +70,8 @@ export function LeadsTable({
   rows = [],
   page = 0,
   rowsPerPage = 0,
+  onPageChange,
+  onRowsPerPageChange,
   loading = false,
 }: CustomersTableProps): React.JSX.Element {
 //   const rowIds = React.useMemo(() => {
@@ -161,15 +166,15 @@ export function LeadsTable({
         </Table>
       </TableContainer>
       <Divider />
-      <TablePagination
-        component="div"
-        count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+       
+     <TablePagination
+  component="div"
+  count={count ?? 0}
+  page={page ?? 0}
+  onPageChange={onPageChange}
+  rowsPerPage={rowsPerPage ?? 10}
+  onRowsPerPageChange={onRowsPerPageChange}
+/>
     </Card>
   );
 }

@@ -7,6 +7,7 @@ export const paths = {
     Leads: '/dashboard/Leads',
     project: '/dashboard/project',
     addproject: '/dashboard/project/addproject',
+    specificLeads: '/dashboard/project/specific-leads',
     properties: '/dashboard/properties',
     jobs: '/dashboard/jobs',
   },
