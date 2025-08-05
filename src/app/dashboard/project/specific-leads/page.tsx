@@ -93,6 +93,7 @@ export default function Page() {
 	}, [searchTerm, specificleads]);
 
 	const paginatedLeads = React.useMemo(() => {
+		 if (rowsPerPage === -1) return filteredLeads;
 		return filteredLeads.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 	}, [filteredLeads, page, rowsPerPage]);
 	const exportToCSV = () => {
@@ -269,6 +270,7 @@ export default function Page() {
 						page={page}
 						onPageChange={(_, newPage) => setPage(newPage)}
 						rowsPerPage={rowsPerPage}
+						rowsPerPageOptions={[10, 25, 50, 100, 200, { label: 'All', value: -1 }]}
 						onRowsPerPageChange={(e) => {
 							setRowsPerPage(parseInt(e.target.value, 10));
 							setPage(0);

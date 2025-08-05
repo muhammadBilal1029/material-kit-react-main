@@ -28,7 +28,6 @@ import TableContainer from '@mui/material/TableContainer';
 function noop(): void {
   // do nothing
 }
-
 export interface Customer {
   id: string;
   storeName: string;
@@ -62,6 +61,7 @@ interface CustomersTableProps {
   rowsPerPage?: number;
     onPageChange: (_: any, newPage: number) => void;
     onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    rowsPerPageOptions?: Array<number | { label: string; value: number }>;
   loading?: boolean;
 }
 
@@ -72,6 +72,7 @@ export function LeadsTable({
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
+   rowsPerPageOptions = [10, 25, 50, 100],
   loading = false,
 }: CustomersTableProps): React.JSX.Element {
 //   const rowIds = React.useMemo(() => {
@@ -174,6 +175,7 @@ export function LeadsTable({
   onPageChange={onPageChange}
   rowsPerPage={rowsPerPage ?? 10}
   onRowsPerPageChange={onRowsPerPageChange}
+   rowsPerPageOptions={rowsPerPageOptions}
 />
     </Card>
   );

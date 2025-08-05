@@ -40,6 +40,7 @@ interface CustomersTableProps {
   rowsPerPage?: number;
    onPageChange: (_: any, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    rowsPerPageOptions?: Array<number | { label: string; value: number }>;
   onCancel?: (_id: string) => void;
 }
 
@@ -50,6 +51,7 @@ export function ProjectTable({
   rowsPerPage,
   onPageChange,
   onRowsPerPageChange,
+    rowsPerPageOptions = [10, 25, 50, 100],
   onCancel
 }: CustomersTableProps): React.JSX.Element {
   // const rowIds = React.useMemo(() => {
@@ -136,6 +138,7 @@ const handleViewLeads = async (row: Customer) => {
   onPageChange={onPageChange}
   rowsPerPage={rowsPerPage ?? 10}
   onRowsPerPageChange={onRowsPerPageChange}
+     rowsPerPageOptions={rowsPerPageOptions}
 />
     </Card>
   );

@@ -89,7 +89,7 @@ const paginatedProjects = React.useMemo(() => {
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
-
+  if (rowsPerPages === -1) return filtered;
   return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
 }, [searchTerm, projects, pages, rowsPerPages]);
  const handleCancel = async (projectId: string) => {
@@ -175,6 +175,7 @@ const paginatedProjects = React.useMemo(() => {
   page={pages}
   rowsPerPage={rowsPerPages}
   onPageChange={(_, newPage) => setPages(newPage)}
+  rowsPerPageOptions={[10, 25, 50, 100, 200, { label: 'All', value: -1 }]}
   onRowsPerPageChange={(e) => {
     setRowsPerPages(parseInt(e.target.value, 10));
     setPages(0); // reset to page 0 when page size changes
