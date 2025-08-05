@@ -19,8 +19,8 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
 
   return (
     <AuthGuard>
-      <GlobalStyles
-        styles={{
+      {GlobalStyles({
+        styles: {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
@@ -29,8 +29,8 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
           },
-        }}
-      />
+        },
+      })}
       <Box
         sx={{
           bgcolor: 'var(--mui-palette-background-default)',
