@@ -7,7 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 // import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
+// import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
@@ -15,6 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
+import { Typography } from '@mui/material';
 import { useUser } from '@/hooks/use-user';
 export default function Page() {
     const router = useRouter();
@@ -82,10 +83,21 @@ const handleSubmit = async () => {
     toast.error(err?.message || 'Something went wrong');
   }
 };
+const handleBack = () => {
+		window.history.back();
+	};
 
   return (
     <Card>
-        <CardHeader  title="Add Project" />
+      <div style={{ padding: 20, display: "flex", alignItems: "center" }}>
+              <Button variant="outlined" onClick={handleBack}>
+                Back to Projects
+              </Button>
+               <Typography variant="h6" style={{ margin: "auto" }}>
+					Add Project
+				</Typography>
+            </div>
+      
         <Divider />
         <CardContent>
           <Grid container spacing={3}>
