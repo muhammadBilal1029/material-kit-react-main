@@ -203,7 +203,7 @@ export function SignUpForm(): React.JSX.Element {
 						<OutlinedInput value={otp} onChange={(e) => setOtp(e.target.value)} label="Enter OTP" type="text" />
 						{error && <FormHelperText>{error}</FormHelperText>}
 					</FormControl>
-					<Button onClick={handleVerifyOtp} variant="contained">
+					<Button onClick={handleVerifyOtp} disabled={isPending} variant="contained">
 						Verify & Register
 					</Button>
 				</>
