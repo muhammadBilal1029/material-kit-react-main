@@ -76,6 +76,7 @@ export function SignUpForm(): React.JSX.Element {
     setIsPending(true);
 		if (!otp || otp.length < 6) {
 			setError("Please enter a valid OTP");
+      setIsPending(false)
 			// alert("Please enter a valid OTP")
 			return;
 		}
