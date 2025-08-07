@@ -51,27 +51,39 @@ export function SignUpForm(): React.JSX.Element {
 	} = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
 	const onSubmit = React.useCallback(
-		async (values: Values): Promise<void> => {
-			setIsPending(true);
+  async (values: Values): Promise<void> => {
+    setIsPending(true);
 
-			const { error } = await authClient.SendOtp({
-				...values,
-				phone: Number(values.phone),
-			});
+    try {
+      const emailRegex = /^[\w-.]+@([\w-]+\.)+(com|org|edu|gmail\.com)$/i;
+      if (!emailRegex.test(values.email)) {
+        setError("Invalid email domain. Only .edu, .org, .com, or gmail.com allowed.");
+        setIsPending(false);
+        return;
+      }
 
-			if (error) {
-				setError(error || "Something went wrong");
+      const { error } = await authClient.SendOtp({
+        ...values,
+        phone: Number(values.phone),
+      });
 
-				;
-				return;
-			}
-			setFormData(values);
-			setOtpSent(true);
+      if (error) {
+        setError(error || "Something went wrong");
+        setIsPending(false);
+        return;
+      }
+
+      setFormData(values);
+      setOtpSent(true);
+      localStorage.setItem("pendingRegisterData", JSON.stringify(values));
+    } catch (err) {
+      setError("An unexpected error occurred.");
+    } finally {
       setIsPending(false);
-			localStorage.setItem("pendingRegisterData", JSON.stringify(values));
-		},
-		[router, setError]
-	);
+    }
+  },
+  [router, setError]
+);
 	const handleVerifyOtp = async () => {
     setIsPending(true);
 		if (!otp || otp.length < 6) {
