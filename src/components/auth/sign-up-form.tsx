@@ -67,11 +67,13 @@ export function SignUpForm(): React.JSX.Element {
 			}
 			setFormData(values);
 			setOtpSent(true);
+      setIsPending(false);
 			localStorage.setItem("pendingRegisterData", JSON.stringify(values));
 		},
 		[router, setError]
 	);
 	const handleVerifyOtp = async () => {
+    setIsPending(true);
 		if (!otp || otp.length < 6) {
 			setError("Please enter a valid OTP");
 			// alert("Please enter a valid OTP")
