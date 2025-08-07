@@ -90,7 +90,7 @@ export function SignUpForm(): React.JSX.Element {
 			if (error) {
 				setError(error);
 				// alert(error)
-
+        setIsPending(false)
 				return;
 			}
 
@@ -100,6 +100,7 @@ export function SignUpForm(): React.JSX.Element {
 		} catch (err) {
 			console.error(err);
 			setError("OTP verification failed.");
+      setIsPending(false)
 			// alert('OTP verification failed.')
 		}
 	};
