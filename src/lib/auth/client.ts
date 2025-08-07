@@ -17,10 +17,16 @@ function _generateToken(): string {
 // } satisfies User;
 
 export interface SignUpParams {
+  email: string;
+  otp?: string;
+  
+}
+export interface OtpSendParams {
   username: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  phone: number;
+  otp?: string;
   terms: boolean;
 }
 export interface SignUpBusinessParams {
@@ -81,11 +87,11 @@ class AuthClient {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: _.username,
+        
           email: _.email,
-          password: _.password,
-          confirmPassword: _.confirmPassword,
-          terms: _.terms ? 'true' : 'false',
+         
+          otp: _.otp,
+       
         }),
       });
       const data = await response.json();
@@ -107,6 +113,42 @@ class AuthClient {
     return {};
   }
 
+async SendOtp(_: OtpSendParams): Promise<{ error?: string }> {
+    // Make API request
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users/send-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+         username: _.username,
+        email: _.email,
+        password: _.password,
+        phone: _.phone,
+        terms: _.terms ? 'true' : 'false',
+       
+        }),
+      });
+      const data = await response.json();
+     
+      if (!response.ok) {
+        throw new Error(data.error || 'Sign up failed');
+      }
+      // const token= data.token;
+      
+      // localStorage.setItem('auth-token', token);
+      // localStorage.setItem('user', JSON.stringify(data.user));
+    } catch (_err) {
+      return { error: 'Sign up failed' };
+      
+    }
+    // We do not handle the API, so we'll just generate a token and store it in localStorage.
+    
+   
+ 
+    return {};
+  }
 
 
   async signUpwithbusiness(_: SignUpBusinessParams): Promise<{ error?: string }> {

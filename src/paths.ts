@@ -1,6 +1,6 @@
 export const paths = {
   home: '/',
-  auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up', signUpBussiness: '/auth/signupbussiness', resetPassword: '/auth/reset-password' },
+  auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up',sendotp:"/auth/sign-up/send-otp", signUpBussiness: '/auth/signupbussiness', resetPassword: '/auth/reset-password' },
   dashboard: {
     overview: '/dashboard',
     news: '/dashboard/news',
