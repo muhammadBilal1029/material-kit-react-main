@@ -62,7 +62,7 @@ export function SignUpForm(): React.JSX.Element {
 			if (error) {
 				setError(error || "Something went wrong");
 
-				setIsPending(false);
+				;
 				return;
 			}
 			setFormData(values);
