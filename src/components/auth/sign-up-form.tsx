@@ -69,7 +69,17 @@ export function SignUpForm(): React.JSX.Element {
         setIsPending(false);
         return;
       }
+      const allowedDomains = ["gmail.com", "edu", "org", "com"];
+		const emailDomain = values.email.split("@")[1];
+		const isValidDomain = allowedDomains.some((domain) =>
+			emailDomain.endsWith(domain)
+		);
 
+		if (!isValidDomain) {
+			setError("Only .edu, .org, .com or gmail.com emails are allowed");
+			setIsPending(false);
+			return;
+		}
       const { error } = await authClient.SendOtp({
         ...values,
         phone: Number(values.phone),
