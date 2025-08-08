@@ -24,7 +24,15 @@ import { useUser } from "@/hooks/use-user";
 
 const schema = zod.object({
 	username: zod.string().min(1, { message: "Username is required" }),
-	email: zod.string().min(1, { message: "Email is required" }).email(),
+	email: zod
+		.string()
+		.min(1, { message: "Email is required" })
+		.email()
+		.refine(
+			(val) =>
+				/^[\w-.]+@([\w-]+\.)?(gmail\.com|edu|org|com)$/.test(val),
+			{ message: "Only .edu, .org, .com or gmail.com emails are allowed" }
+		),
 	password: zod.string().min(6, { message: "Password should be at least 6 characters" }),
 	phone: zod.string().min(11, { message: "Please Enter a valid phone number" }),
 	otp: zod.string().optional(),
@@ -53,6 +61,17 @@ export function SignUpForm(): React.JSX.Element {
 	const onSubmit = React.useCallback(
 		async (values: Values): Promise<void> => {
 			setIsPending(true);
+			const allowedDomains = ["gmail.com", "edu", "org", "com"];
+		const emailDomain = values.email.split("@")[1];
+		const isValidDomain = allowedDomains.some((domain) =>
+			emailDomain.endsWith(domain)
+		);
+
+		if (!isValidDomain) {
+			setError("Only .edu, .org, .com or gmail.com emails are allowed");
+			setIsPending(false);
+			return;
+		}
 
 			const { error } = await authClient.SendOtp({
 				...values,
@@ -61,7 +80,6 @@ export function SignUpForm(): React.JSX.Element {
 
 			if (error) {
 				setError(error || "Something went wrong");
-
 				setIsPending(false);
 				return;
 			}
