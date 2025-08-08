@@ -131,10 +131,11 @@ async SendOtp(_: OtpSendParams): Promise<{ error?: string }> {
         }),
       });
       const data = await response.json();
-     
-      if (!response.ok) {
-        throw new Error(data.error || 'Sign up failed');
-      }
+       if (!response.ok) {
+      return { error: data.msg || data.error || "Sign up failed" };
+    }
+
+    return {};
       // const token= data.token;
       
       // localStorage.setItem('auth-token', token);
