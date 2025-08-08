@@ -59,20 +59,17 @@ export function SignUpForm(): React.JSX.Element {
 	} = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
 	const onSubmit = React.useCallback(
-		async (values: Values): Promise<void> => {
-			setIsPending(true);
-			const allowedDomains = ["gmail.com", "edu", "org", "com"];
-		const emailDomain = values.email.split("@")[1];
-		const isValidDomain = allowedDomains.some((domain) =>
-			emailDomain.endsWith(domain)
-		);
+  async (values: Values): Promise<void> => {
+    setIsPending(true);
 
-		if (!isValidDomain) {
-			setError("Only .edu, .org, .com or gmail.com emails are allowed");
-			setIsPending(false);
-			return;
-		}
     try {
+      const emailRegex = /^[\w-.]+@([\w-]+\.)+(com|org|edu|gmail\.com)$/i;
+      if (!emailRegex.test(values.email)) {
+        setError("Invalid email domain. Only .edu, .org, .com, or gmail.com allowed.");
+        setIsPending(false);
+        return;
+      }
+
       const { error } = await authClient.SendOtp({
         ...values,
         phone: Number(values.phone),
