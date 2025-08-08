@@ -63,12 +63,6 @@ export function SignUpForm(): React.JSX.Element {
     setIsPending(true);
 
     try {
-      const emailRegex = /^[\w-.]+@([\w-]+\.)+(com|org|edu|gmail\.com)$/i;
-      if (!emailRegex.test(values.email)) {
-        setError("Invalid email domain. Only .edu, .org, .com, or gmail.com allowed.");
-        setIsPending(false);
-        return;
-      }
       const allowedDomains = ["gmail.com", "edu", "org", "com"];
 		const emailDomain = values.email.split("@")[1];
 		const isValidDomain = allowedDomains.some((domain) =>
