@@ -72,28 +72,32 @@ export function SignUpForm(): React.JSX.Element {
 			setIsPending(false);
 			return;
 		}
-
-			const { error } = await authClient.SendOtp({
-				...values,
-				phone: Number(values.phone),
-			});
-
-			if (error) {
-				setError(error || "Something went wrong");
-				setIsPending(false);
-				return;
-			}
-			setFormData(values);
-			setOtpSent(true);
+    try {
+      const { error } = await authClient.SendOtp({
+        ...values,
+        phone: Number(values.phone),
+      });
+      if (error) {
+        setError(error || "Something went wrong");
+        setIsPending(false);
+        return;
+      }
+      setFormData(values);
+      setOtpSent(true);
+      localStorage.setItem("pendingRegisterData", JSON.stringify(values));
+    } catch (err) {
+      setError("An unexpected error occurred.");
+    } finally {
       setIsPending(false);
-			localStorage.setItem("pendingRegisterData", JSON.stringify(values));
-		},
-		[router, setError]
-	);
+    }
+  },
+  [router, setError]
+);
 	const handleVerifyOtp = async () => {
     setIsPending(true);
 		if (!otp || otp.length < 6) {
 			setError("Please enter a valid OTP");
+      setIsPending(false)
 			// alert("Please enter a valid OTP")
 			return;
 		}
@@ -107,7 +111,7 @@ export function SignUpForm(): React.JSX.Element {
 			if (error) {
 				setError(error);
 				// alert(error)
-
+        setIsPending(false)
 				return;
 			}
 
@@ -117,6 +121,7 @@ export function SignUpForm(): React.JSX.Element {
 		} catch (err) {
 			console.error(err);
 			setError("OTP verification failed.");
+      setIsPending(false)
 			// alert('OTP verification failed.')
 		}
 	};
