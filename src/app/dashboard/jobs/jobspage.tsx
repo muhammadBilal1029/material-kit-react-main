@@ -93,6 +93,49 @@ const paginatedJobs = React.useMemo(() => {
   return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
 }, [searchTerm, jobs, pages, rowsPerPages]);
 
+
+const handleAddJobs = async  () => {
+     const token = localStorage.getItem("auth-token");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log(!user?.email);
+    if (!token || !user?.email) {
+    console.error('No auth token found');
+    setLoading(false);
+    await checkSession?.();
+    router.refresh();
+    return;
+    }
+ try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/scraping/jobs`, {
+      method: "POST",
+      headers: {
+      Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+
+    // Check for token expiry message
+    if (data?.msg === 'Token Expired. Please log in again.') {
+      toast.error('Session expired. Please login again.');
+      localStorage.removeItem('auth-token');
+      await checkSession?.();
+      router.refresh();
+      setLoading(false);
+      return;
+    }
+
+    if (!res.ok) {
+      setLoading(false);
+      return;
+    }
+
+    setjobs(data);
+    setLoading(false);
+    } catch (err) {
+    console.error('Failed to fetch leads:', err);
+    setLoading(false);
+    }
+};
 	return (
 		<Stack spacing={3}>
 			<Stack direction="row" spacing={3}>
@@ -102,11 +145,11 @@ const paginatedJobs = React.useMemo(() => {
 				<div>
 					<Button
           sx={{backgroundColor:"#0fb9d8"}}
-						onClick={() => router.push("/dashboard/jobs/addjob")}
+						onClick={handleAddJobs}
 						startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
 						variant="contained"
 					>
-						Add
+						Scrape Jobs
 					</Button>
 				</div>
 			</Stack>
@@ -116,7 +159,7 @@ const paginatedJobs = React.useMemo(() => {
 					value={searchTerm}
 					onChange={(e) => setSearchTerm(e.target.value)}
 					fullWidth
-					placeholder="Search Projects"
+					placeholder="Search Jobs"
 					startAdornment={
 						<InputAdornment position="start">
 							<MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />

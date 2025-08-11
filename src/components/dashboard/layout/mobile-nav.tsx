@@ -24,6 +24,7 @@ export interface MobileNavProps {
   onClose?: () => void;
   open?: boolean;
   items?: NavItemConfig[];
+  
 }
 
 export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element {
@@ -109,16 +110,27 @@ function renderNavItems({ items = [], pathname }: { items?: NavItemConfig[]; pat
 
 interface NavItemProps extends Omit<NavItemConfig, 'items'> {
   pathname: string;
+  items?: NavItemConfig[];
 }
 
-function NavItem({ disabled, external, href, icon, matcher, pathname, title }: NavItemProps): React.JSX.Element {
+
+function NavItem({ disabled, external, href, icon, matcher, pathname, title, items }: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
+  const [open, setOpen] = React.useState(false);
 
+  const hasChildren = Array.isArray(items) && items.length > 0;
+
+  const toggleOpen = () => {
+    if (hasChildren) {
+      setOpen((prev) => !prev);
+    }
+  };
   return (
     <li>
       <Box
-        {...(href
+      	onClick={toggleOpen}
+        {...(href && !hasChildren
           ? {
               component: external ? 'a' : RouterLink,
               href,
@@ -163,7 +175,15 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
             {title}
           </Typography>
         </Box>
+        	{hasChildren && <Box sx={{ fontSize: "0.75rem", opacity: 0.6 }}>{open ? "▲" : "▼"}</Box>}
       </Box>
+      	{hasChildren && open && (
+				<Stack component="ul" spacing={0.5} sx={{ listStyle: "none", pl: 4, mt: 0.5 }}>
+					{items.map((sub) => (
+						<NavItem pathname={pathname} {...sub} />
+					))}
+				</Stack>
+			)}
     </li>
   );
 }
