@@ -65,42 +65,51 @@ const handleViewLeads = async (row: Customer) => {
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
+        <Table  sx={{ minWidth: '800px' }}>
           <TableHead>
-            <TableRow>
+            <TableRow >
              
-              <TableCell>Name</TableCell>
+              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Name</TableCell>
             
-              <TableCell>City</TableCell>
-              <TableCell>businessCategory</TableCell>
-              <TableCell>Status</TableCell>
-               <TableCell>Action</TableCell>
+              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>City</TableCell>
+              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>businessCategory</TableCell>
+              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Status</TableCell>
+               <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Action</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody style={{color:"#525f7f", fontWeight:"bold"}}>
             {rows.map((row) => {
             
 
               return (
                 <TableRow hover key={row._id} >
                  
-                  <TableCell>
+                  <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                       <Avatar src={row.avatar} />
                       <Typography variant="subtitle2">{row.projectName}</Typography>
                     </Stack>
                   </TableCell>
               
-                  <TableCell>
+                  <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
                   {row.city}
                   </TableCell>
-                  <TableCell>{row.businessCategory}</TableCell>
-                  <TableCell>{row.status}</TableCell>
-                   <TableCell>
+                  <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.businessCategory}</TableCell>
+                  <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.status}</TableCell>
+                   <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
                 {row.status === 'Running' ? (
   <Button
     variant="outlined"
-    color="error"
+    sx={{
+    color: 'white',
+    borderColor: '#0fb9d8',
+    backgroundColor: '#0fb9d8',
+    '&:hover': {
+      backgroundColor: '0fb9d8', // light transparent background on hover
+      borderColor: '#0da5c0',
+      color:"black"
+    },
+  }}
     size="small"
     onClick={() => onCancel?.(row.projectId)}
   >
@@ -110,12 +119,22 @@ const handleViewLeads = async (row: Customer) => {
   <Button
     variant="contained"
     size="small"
+     sx={{
+    color: 'white',
+    borderColor: '#0fb9d8',
+    backgroundColor: '#0fb9d8',
+    '&:hover': {
+      backgroundColor: '0fb9d8', // light transparent background on hover
+      borderColor: '#0da5c0',
+      color:"black"
+    },
+  }}
     onClick={() => handleViewLeads(row)}
   >
     View Leads
   </Button>
 ) : row.status === 'Cancelled' ? (
-  <Typography color="error" variant="body2">
+  <Typography sx={{color:"#0fb9d8"}} variant="body2">
     Cancelled
   </Typography>
 ) : (

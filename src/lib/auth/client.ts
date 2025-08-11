@@ -226,22 +226,20 @@ try {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      
     },
     body: JSON.stringify(params),
   });
-
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.error || 'Login failed');
   }
     const token = data.token;
-    
+    console.log("token",token);
     localStorage.setItem('auth-token', token);
     localStorage.setItem('user', JSON.stringify(data.user));
   // Store token or perform any client-side session logic here
   // For example: localStorage.setItem('token', data.token);
-
-
 } catch (_err) {
  
   return { error: 'Invalid credentials' };

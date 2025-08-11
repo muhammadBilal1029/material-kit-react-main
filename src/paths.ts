@@ -10,6 +10,11 @@ export const paths = {
     specificLeads: '/dashboard/project/specific-leads',
     properties: '/dashboard/properties',
     jobs: '/dashboard/jobs',
+    addjobs: '/dashboard/jobs/addjob',
+    myApplications: '/dashboard/jobs/myApplications',
+    allApplicants: '/dashboard/jobs/allApplicants',
+    freelancerJobs: '/dashboard/jobs/freelancerJobs',
+
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

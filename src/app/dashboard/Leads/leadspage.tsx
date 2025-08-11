@@ -269,7 +269,7 @@ export default function Page(): React.JSX.Element {
 		<Stack spacing={3}>
 			<Stack direction="row" spacing={3}>
 				<Stack spacing={1} sx={{ flex: "1 1 auto" }}>
-					<Typography variant="h4">All Leads</Typography>
+					<Typography variant="h4" sx={{color:"#525f7f"}}>All Leads</Typography>
 				</Stack>
 			</Stack>
 			{/* <LeadsFilters leads={leads} /> */}
@@ -288,14 +288,14 @@ export default function Page(): React.JSX.Element {
 						sx={{ maxWidth: "400px" }}
 					/>
 
-					<Button onClick={exportToCSV} className="sm:flex" variant="contained" sx={{ ml: 2 }}>
+					<Button onClick={exportToCSV} className="sm:flex" variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
 						Export To CSV
 					</Button>
-					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2 }}>
+					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
 						Export To Pdf
 					</Button>
 
-					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2 }}>
+					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
 						Export To Excel
 					</Button>
 				</Stack>

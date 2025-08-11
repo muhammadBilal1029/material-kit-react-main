@@ -131,10 +131,11 @@ const paginatedProjects = React.useMemo(() => {
 		<Stack spacing={3}>
 			<Stack direction="row" spacing={3}>
 				<Stack spacing={1} sx={{ flex: "1 1 auto" }}>
-					<Typography variant="h4">Projects</Typography>
+					<Typography sx={{color:"#525f7f"}} variant="h4">Projects</Typography>
 				</Stack>
 				<div>
 					<Button
+					sx={{color:"white", backgroundColor:"#0fb9d8"}}
 					onClick={() => router.push('/dashboard/project/addproject')}
 						startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
 						variant="contained"
