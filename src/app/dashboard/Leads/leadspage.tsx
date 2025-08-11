@@ -18,6 +18,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Papa from "papaparse";
 import toast from "react-hot-toast";
+import io from "socket.io-client";
 // import Stack from '@mui/material/Stack';
 import * as XLSX from "xlsx";
 
@@ -26,6 +27,8 @@ import { useUser } from "@/hooks/use-user";
 // import { config } from '@/config';
 // import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from "@/components/dashboard/Leads/leads-table";
+
+const socket = io("http://localhost:5000");
 
 export default function Page(): React.JSX.Element {
 	const router = useRouter();
@@ -49,62 +52,61 @@ export default function Page(): React.JSX.Element {
 		a.click();
 		URL.revokeObjectURL(url);
 	};
-  //  const exportToCSV = () => {
-  //     const csvRows = [
-  //     [
-  //       "ID",
-  //       "Project Name",
-  //       "Name",
-  //       "Email",
-  //       "Address",
-  //       "Category",
-  //       "Phone",
-  //       "City",
-  //       "Google Url",
-  //       "Website",
-  //       "Rating",
-  //       "Stars",
-  //       "Reviews",
-  //       "About",
-  //       "Facebook",
-  //       "LinkedIn",
-  //       "Instagram",
-  //       "Youtube",
-  //       "Logo",
-  //       "Images",
-  //     ],
-  //     ...leads.map((lead) => [
-  //       lead.placeId,
-  //       lead.storeName,
-  //       lead.email,
-  //       lead.address,
-  //       lead.category,
-  //       lead.phone,
-  //       lead.city,
-  //       lead.googleUrl,
-  //       lead.bizWebsite,
-  //       lead.ratingText,
-  //       lead.stars,
-  //       lead.numberOfReviews,
-  //       lead.about,
-  //       lead.facebook || "N/A",
-  //       lead.linkedIn || "N/A",
-  //       lead.instagram || "N/A",
-  //       lead.youtube || "N/A",
-  //       lead.logoUrl || "N/A",
-  //       lead.images || "N/A",
-  //     ]),
-  //   ];
+	//  const exportToCSV = () => {
+	//     const csvRows = [
+	//     [
+	//       "ID",
+	//       "Project Name",
+	//       "Name",
+	//       "Email",
+	//       "Address",
+	//       "Category",
+	//       "Phone",
+	//       "City",
+	//       "Google Url",
+	//       "Website",
+	//       "Rating",
+	//       "Stars",
+	//       "Reviews",
+	//       "About",
+	//       "Facebook",
+	//       "LinkedIn",
+	//       "Instagram",
+	//       "Youtube",
+	//       "Logo",
+	//       "Images",
+	//     ],
+	//     ...leads.map((lead) => [
+	//       lead.placeId,
+	//       lead.storeName,
+	//       lead.email,
+	//       lead.address,
+	//       lead.category,
+	//       lead.phone,
+	//       lead.city,
+	//       lead.googleUrl,
+	//       lead.bizWebsite,
+	//       lead.ratingText,
+	//       lead.stars,
+	//       lead.numberOfReviews,
+	//       lead.about,
+	//       lead.facebook || "N/A",
+	//       lead.linkedIn || "N/A",
+	//       lead.instagram || "N/A",
+	//       lead.youtube || "N/A",
+	//       lead.logoUrl || "N/A",
+	//       lead.images || "N/A",
+	//     ]),
+	//   ];
 
-  //   const csvContent = `data:text/csv;charset=utf-8,${csvRows
-  //     .map((row) => row.join(","))
-  //     .join("\n")}`;
-  //   const link = document.createElement("a");
-  //   link.href = encodeURI(csvContent);
-  //   link.download = "leads.csv";
-  //   link.click();
-  // };
-
+	//   const csvContent = `data:text/csv;charset=utf-8,${csvRows
+	//     .map((row) => row.join(","))
+	//     .join("\n")}`;
+	//   const link = document.createElement("a");
+	//   link.href = encodeURI(csvContent);
+	//   link.download = "leads.csv";
+	//   link.click();
+	// };
 
 	// const exportToExcel = () => {
 	// 	const worksheet = XLSX.utils.json_to_sheet(leads);
@@ -112,13 +114,12 @@ export default function Page(): React.JSX.Element {
 	// 	XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
 	// 	XLSX.writeFile(workbook, "leads.xlsx");
 	// };
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(leads);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Leads");
-    XLSX.writeFile(wb, "leads.xlsx");
-  };
-
+	const exportToExcel = () => {
+		const ws = XLSX.utils.json_to_sheet(leads);
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, "Leads");
+		XLSX.writeFile(wb, "leads.xlsx");
+	};
 
 	// const exportToPDF = () => {
 	// 	const doc = new jsPDF();
@@ -171,91 +172,118 @@ export default function Page(): React.JSX.Element {
 
 	// 	doc.save("leads.pdf");
 	// };
- const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    let yPosition = 20;
+	const exportToPDF = () => {
+		const doc = new jsPDF();
+		doc.setFontSize(16);
+		let yPosition = 20;
 
-    leads.forEach((lead, index) => {
-      doc.text(`Lead #${index + 1}`, 20, yPosition);
-      yPosition += 10;
+		leads.forEach((lead, index) => {
+			doc.text(`Lead #${index + 1}`, 20, yPosition);
+			yPosition += 10;
 
-      doc.setFontSize(12);
-      doc.text(`Store Name: ${lead.storeName || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Email: ${lead.email || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Address: ${lead.address || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`City: ${lead.city || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Category: ${lead.category || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Phone: ${lead.phone || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Google URL: ${lead.googleUrl || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Website: ${lead.bizWebsite || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Rating: ${lead.ratingText || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Stars: ${lead.stars || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`LogoUrl: ${lead.logoUrl || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Images: ${lead.images || "N/A"}`, 20, yPosition);
-      yPosition += 10;
-      doc.text(`Reviews: ${lead.numberOfReviews || "N/A"}`, 20, yPosition);
-      yPosition += 20; // Add space between leads
+			doc.setFontSize(12);
+			doc.text(`Store Name: ${lead.storeName || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Email: ${lead.email || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Address: ${lead.address || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`City: ${lead.city || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Category: ${lead.category || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Phone: ${lead.phone || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Google URL: ${lead.googleUrl || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Website: ${lead.bizWebsite || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Rating: ${lead.ratingText || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Stars: ${lead.stars || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`LogoUrl: ${lead.logoUrl || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Images: ${lead.images || "N/A"}`, 20, yPosition);
+			yPosition += 10;
+			doc.text(`Reviews: ${lead.numberOfReviews || "N/A"}`, 20, yPosition);
+			yPosition += 20; // Add space between leads
 
-      if (yPosition > 280) {
-        doc.addPage();
-        yPosition = 20;
+			if (yPosition > 280) {
+				doc.addPage();
+				yPosition = 20;
+			}
+		});
+
+		doc.save("leads.pdf");
+	};
+	const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+React.useEffect(() => {
+  if (!user.email) return;
+
+  const token = localStorage.getItem("auth-token");
+  if (!token) {
+    console.error("No auth token found");
+    setLoading(false);
+    router.replace("/auth/sign-in");
+    return;
+  }
+
+  let isMounted = true;
+
+  const fetchLeads = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (data?.msg === "Token Expired. Please log in again.") {
+        toast.error("Session expired. Please login again.");
+        localStorage.removeItem("auth-token");
+        await checkSession?.();
+        router.refresh();
+        if (isMounted) setLoading(false);
+        return;
       }
-    });
 
-    doc.save("leads.pdf");
+      if (!res.ok) {
+        if (isMounted) setLoading(false);
+        return;
+      }
+
+      if (isMounted) {
+        setLeads(data.data);
+        setLoading(false);
+      }
+
+      socket.emit("joinVendor", user.email);
+    } catch (err) {
+      console.error("Failed to fetch leads:", err);
+      if (isMounted) setLoading(false);
+    }
   };
-	React.useEffect(() => {
-		// Replace this with your real API call
-		const token = localStorage.getItem("auth-token");
-		if (!token) {
-			console.error("No auth token found");
-			setLoading(false);
-			router.replace("/auth/sign-in"); // Redirect to login if no token
-			return;
-		}
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		})
-			.then(async (res) => {
-				const data = await res.json();
 
-				// Check for token expiry message
-				if (data?.msg === "Token Expired. Please log in again.") {
-					toast.error("Session expired. Please login again.");
-					localStorage.removeItem("auth-token");
-					await checkSession?.();
-					router.refresh();
-					setLoading(false);
-					return;
-				}
+  fetchLeads();
 
-				if (!res.ok) {
-					setLoading(false);
-					return;
-				}
+  // Socket listener
+  socket.on("lead", (newLead: Customer) => {
+    console.log("📢 New lead received:", newLead);
+    setLeads((prevLeads) => [newLead, ...prevLeads]);
+  });
 
-				setLeads(data.data);
-				setLoading(false);
-			})
-			.catch((err) => {
-				console.error("Failed to fetch leads:", err);
-				setLoading(false);
-			});
-	}, [router]);
+  // Cleanup
+  return () => {
+    isMounted = false;
+    socket.off("lead");
+  };
+}, [router, user.email,checkSession]);
+
+
 	const paginatedProjects = React.useMemo(() => {
 		const filtered = !searchTerm.trim()
 			? leads
@@ -269,7 +297,9 @@ export default function Page(): React.JSX.Element {
 		<Stack spacing={3}>
 			<Stack direction="row" spacing={3}>
 				<Stack spacing={1} sx={{ flex: "1 1 auto" }}>
-					<Typography variant="h4" sx={{color:"#525f7f"}}>All Leads</Typography>
+					<Typography variant="h4" sx={{ color: "#525f7f" }}>
+						All Leads
+					</Typography>
 				</Stack>
 			</Stack>
 			{/* <LeadsFilters leads={leads} /> */}
@@ -288,14 +318,19 @@ export default function Page(): React.JSX.Element {
 						sx={{ maxWidth: "400px" }}
 					/>
 
-					<Button onClick={exportToCSV} className="sm:flex" variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button
+						onClick={exportToCSV}
+						className="sm:flex"
+						variant="contained"
+						sx={{ ml: 2, backgroundColor: "#0fb9d8" }}
+					>
 						Export To CSV
 					</Button>
-					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
 						Export To Pdf
 					</Button>
 
-					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
 						Export To Excel
 					</Button>
 				</Stack>
