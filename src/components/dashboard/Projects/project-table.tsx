@@ -85,8 +85,9 @@ export function ProjectTable({
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const projects = JSON.parse(localStorage.getItem("projects") || "[]");
 
-  const [totalLeadsMap, setTotalLeadsMap] = React.useState({});
-  const joinedProjectsRef = React.useRef(new Set());
+  const [totalLeadsMap, setTotalLeadsMap] = React.useState<Record<string, number>>({});
+  const joinedProjectsRef = React.useRef<Set<string>>(new Set());
+
 
   React.useEffect(() => {
   if (!rows || rows.length === 0) {
@@ -104,7 +105,7 @@ export function ProjectTable({
 }, [rows]);
 
   React.useEffect(() => {
-    projects.forEach((p) => {
+    projects.forEach((p: any) => {
       if (p.vendorId === user?.email) {
         const roomKey = `${p.vendorId}_${p.projectCategory}`;
 
