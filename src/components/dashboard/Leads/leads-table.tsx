@@ -108,48 +108,48 @@ export function LeadsTable({
 				<Table sx={{ minWidth: "800px" }} stickyHeader>
 					<TableHead>
 						<TableRow>
-							
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}} >ID</TableCell>
 
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Name</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}} >Email</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >ID</TableCell>
 
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Location</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Category</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Search Category</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Phone</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Google Map</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Ratings</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Stars</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Reviews</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>About</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Website</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Facebook</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>LinkedIn</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Instagram</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>YouTube</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Logo</TableCell>
-							<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Image</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Name</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >Email</TableCell>
+
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Category</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Search Category</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Phone</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Google Map</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Ratings</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Stars</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Reviews</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>About</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Website</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Facebook</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>LinkedIn</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Instagram</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>YouTube</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Logo</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Image</TableCell>
 						</TableRow>
 					</TableHead>
-					<TableBody style={{color:"#525f7f", fontWeight:"bold"}}>
+					<TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
 						{Array.isArray(rows) && rows.length > 0 ? (
 							rows.map((row) => {
 								return (
 									<TableRow hover key={index}>
-										
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{index++}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{index++}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											<Stack sx={{ alignItems: "center" }} direction="row" spacing={2}>
-												<Typography variant="subtitle2">{row.storeName?(
-                        row.storeName
-                        ):("No Name")}</Typography>
+												<Typography variant="subtitle2">{row.storeName ? (
+													row.storeName
+												) : ("No Name")}</Typography>
 											</Stack>
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.email?(
-                      row.email
-                    ):("No Email")}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.email ? (
+											row.email
+										) : ("No Email")}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.address ? (
 												<Tooltip title={row.address}>
 													<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
@@ -160,14 +160,14 @@ export function LeadsTable({
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.category?(
-                      row.category
-                    ):("No Category")}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.projectCategory?(
-                      row.projectCategory
-                    ):("No Project Category")}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.phone ? <a style={{ color: "rgba(40, 39, 39, 0.87)",textDecoration:"none" }} href={`tel:${row.phone}`}>{row.phone}</a> : "No Phone"}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.category ? (
+											row.category
+										) : ("No Category")}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.projectCategory ? (
+											row.projectCategory
+										) : ("No Project Category")}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.phone ? <a style={{ color: "rgba(40, 39, 39, 0.87)", textDecoration: "none" }} href={`tel:${row.phone}`}>{row.phone}</a> : "No Phone"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.googleUrl ? (
 												<a href={row.googleUrl} target="_blank" rel="noopener noreferrer">
 													<svg
@@ -186,8 +186,8 @@ export function LeadsTable({
 											)}
 										</TableCell>
 
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.ratingText}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.ratingText}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											<Box
 												sx={{
 													display: "flex",
@@ -199,17 +199,17 @@ export function LeadsTable({
 												{renderStars(Number(row.stars))}
 											</Box>
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.numberOfReviews}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>{row.about?(
-                        <Tooltip title={row.about}>
-                          <Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
-                            {row.about.length > 50 ? row.about.slice(0, 50) + "..." : row.about}
-                          </Typography>
-                        </Tooltip>
-                      ):(
-                        "No About"
-                      )}</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.numberOfReviews}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.about ? (
+											<Tooltip title={row.about}>
+												<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
+													{row.about.length > 50 ? row.about.slice(0, 50) + "..." : row.about}
+												</Typography>
+											</Tooltip>
+										) : (
+											"No About"
+										)}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{" "}
 											{row.bizWebsite ? (
 												<Tooltip title={row.bizWebsite}>
@@ -226,7 +226,7 @@ export function LeadsTable({
 												"No Website"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.socialLinks?.facebook ? (
 												<a href={row.socialLinks.facebook} target="_blank" rel="noopener noreferrer">
 													<FaFacebook color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -235,7 +235,7 @@ export function LeadsTable({
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.socialLinks?.linkedin ? (
 												<a href={row.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
 													<FaLinkedin color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -244,7 +244,7 @@ export function LeadsTable({
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.socialLinks?.instagram ? (
 												<a href={row.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
 													<FaInstagram color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -253,7 +253,7 @@ export function LeadsTable({
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.socialLinks?.youtube ? (
 												<a href={row.socialLinks.youtube} target="_blank" rel="noopener noreferrer">
 													<FaYoutube color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -262,7 +262,7 @@ export function LeadsTable({
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.logoUrl ? (
 												<Tooltip title={row.logoUrl}>
 													<a href={row.logoUrl} target="_blank" rel="noopener noreferrer">
@@ -278,7 +278,7 @@ export function LeadsTable({
 												"No Logo"
 											)}
 										</TableCell>
-										<TableCell  sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.imageUrl ? (
 												<Tooltip title={row.imageUrl}>
 													<a href={row.imageUrl} target="_blank" rel="noopener noreferrer">
@@ -299,7 +299,7 @@ export function LeadsTable({
 							})
 						) : (
 							<TableRow>
-								<TableCell  sx={{color:"#525f7f", fontSize:"16px"}} colSpan={20} align="center">
+								<TableCell sx={{ color: "#525f7f", fontSize: "16px" }} colSpan={20} align="center">
 									No data found
 								</TableCell>
 							</TableRow>

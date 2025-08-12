@@ -219,77 +219,77 @@ export default function Page(): React.JSX.Element {
 	};
 	const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-React.useEffect(() => {
-  if (!user.email) return;
+	React.useEffect(() => {
+		if (!user.email) return;
 
-  const token = localStorage.getItem("auth-token");
-  if (!token) {
-    console.error("No auth token found");
-    setLoading(false);
-    router.replace("/auth/sign-in");
-    return;
-  }
+		const token = localStorage.getItem("auth-token");
+		if (!token) {
+			console.error("No auth token found");
+			setLoading(false);
+			router.replace("/auth/sign-in");
+			return;
+		}
 
-  let isMounted = true;
+		let isMounted = true;
 
-  const fetchLeads = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+		const fetchLeads = async () => {
+			try {
+				const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/allLeads`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
 
-      const data = await res.json();
+				const data = await res.json();
 
-      if (data?.msg === "Token Expired. Please log in again.") {
-        toast.error("Session expired. Please login again.");
-        localStorage.removeItem("auth-token");
-        await checkSession?.();
-        router.refresh();
-        if (isMounted) setLoading(false);
-        return;
-      }
+				if (data?.msg === "Token Expired. Please log in again.") {
+					toast.error("Session expired. Please login again.");
+					localStorage.removeItem("auth-token");
+					await checkSession?.();
+					router.refresh();
+					if (isMounted) setLoading(false);
+					return;
+				}
 
-      if (!res.ok) {
-        if (isMounted) setLoading(false);
-        return;
-      }
+				if (!res.ok) {
+					if (isMounted) setLoading(false);
+					return;
+				}
 
-      if (isMounted) {
-        setLeads(data.data);
-        setLoading(false);
-      }
+				if (isMounted) {
+					setLeads(data.data);
+					setLoading(false);
+				}
 
-      socket.emit("joinVendor", user.email);
-    } catch (err) {
-      console.error("Failed to fetch leads:", err);
-      if (isMounted) setLoading(false);
-    }
-  };
+				socket.emit("joinVendor", user.email);
+			} catch (err) {
+				console.error("Failed to fetch leads:", err);
+				if (isMounted) setLoading(false);
+			}
+		};
 
-  fetchLeads();
+		fetchLeads();
 
-  // Socket listener
-  socket.on("lead", (newLead: Customer) => {
-    console.log("📢 New lead received:", newLead);
-    setLeads((prevLeads) => [newLead, ...prevLeads]);
-  });
+		// Socket listener
+		socket.on("lead", (newLead: Customer) => {
+			console.log("📢 New lead received:", newLead);
+			setLeads((prevLeads) => [newLead, ...prevLeads]);
+		});
 
-  // Cleanup
-  return () => {
-    isMounted = false;
-    socket.off("lead");
-  };
-}, [router, user.email,checkSession]);
 
+		// Cleanup
+		return () => {
+			isMounted = false;
+			socket.off("lead");
+		};
+	}, [router, user.email, checkSession]);
 
 	const paginatedProjects = React.useMemo(() => {
 		const filtered = !searchTerm.trim()
 			? leads
 			: leads.filter((lead) =>
-					Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
-				);
+				Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
+			);
 		if (rowsPerPages === -1) return filtered;
 		return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
 	}, [searchTerm, leads, pages, rowsPerPages]);
