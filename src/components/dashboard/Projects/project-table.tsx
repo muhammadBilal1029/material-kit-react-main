@@ -53,7 +53,7 @@ export function ProjectTable({
   onPageChange,
   onRowsPerPageChange,
   rowsPerPageOptions = [10, 25, 50, 100],
-  onCancel
+  onCancel = () => { }
 }: CustomersTableProps): React.JSX.Element {
   // const rowIds = React.useMemo(() => {
   //   return rows.map((customer) => customer.id);
@@ -78,19 +78,45 @@ export function ProjectTable({
 
   const handleCancel = (projectId: string) => {
     socket.emit("cancelTaskFromQueue", projectId)
+    onCancel?.(projectId)
   }
 
-  const [total_leads, setTotalLeads] = React.useState(0);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const projects = JSON.parse(localStorage.getItem("projects") || "[]");
+
+  const [totalLeadsMap, setTotalLeadsMap] = React.useState({});
+  const joinedProjectsRef = React.useRef(new Set());
+
   React.useEffect(() => {
-    socket.on("total_lead", (leads) => {
-      console.log("Received total leads:", leads);
-      setTotalLeads(leads);
+    projects.forEach((p) => {
+      if (p.vendorId === user?.email) {
+        const roomKey = `${p.vendorId}_${p.projectCategory}`;
+        console.log("project category", p.projectCategory)
+
+        if (!joinedProjectsRef.current.has(roomKey)) {
+          socket.emit("join_project", {
+            vendorId: p.vendorId,
+            projectCategory: p.projectCategory,
+          });
+          joinedProjectsRef.current.add(roomKey);
+          console.log(`Joined room: ${roomKey}`);
+        }
+      }
+    });
+
+    socket.on("total_lead", ({ projectCategory, count }) => {
+      console.log(`Updated count for ${projectCategory}: ${count}`);
+      setTotalLeadsMap((prev) => ({
+        ...prev,
+        [projectCategory]: count,
+      }));
     });
 
     return () => {
       socket.off("total_lead");
     };
-  }, []);
+  }, [projects]);
+
 
   return (
     <Card>
@@ -110,6 +136,8 @@ export function ProjectTable({
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
             {rows.map((row) => {
+              console.log("business Category", row.businessCategory)
+              console.log("business Category match", totalLeadsMap[row.businessCategory])
 
 
               return (
@@ -126,7 +154,7 @@ export function ProjectTable({
                     {row.city}
                   </TableCell>
                   <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.businessCategory}</TableCell>
-                  <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{total_leads || 0}</TableCell>
+                  <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{totalLeadsMap[row.businessCategory] ?? 0}</TableCell>
                   <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.status}</TableCell>
                   <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
                     {row.status === 'Running' ? (
