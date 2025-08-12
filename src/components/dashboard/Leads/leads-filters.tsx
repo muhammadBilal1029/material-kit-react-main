@@ -13,6 +13,7 @@ import type { Customer } from './leads-table';
 // import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 interface LeadsFiltersProps {
   leads: Customer[];
+
   onFilter: (filteredLeads: Customer[]) => void;
 }
 export function LeadsFilters({ leads , onFilter}: LeadsFiltersProps) {

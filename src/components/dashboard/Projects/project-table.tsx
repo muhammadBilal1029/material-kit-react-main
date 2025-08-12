@@ -59,6 +59,7 @@ export function ProjectTable({
   //   return rows.map((customer) => customer.id);
   // }, [rows]);
   const [isPause, setIsPause] = React.useState(false);
+   const [tableRows, setTableRows] = React.useState<Customer[]>(rows);
   const router = useRouter();
   const handleViewLeads = async (row: Customer) => {
     router.push(`/dashboard/project/specific-leads?category=${encodeURIComponent(row.businessCategory)}`);
@@ -131,7 +132,23 @@ export function ProjectTable({
     };
   }, [projects]);
 
+ React.useEffect(() => {
+    setTableRows(rows);
+  }, [rows]);
 
+  React.useEffect(() => {
+    function handleStatusUpdate({ projectId, status }: { projectId: string; status: string }) {
+      setTableRows((prevRows) =>
+        prevRows.map((row) =>
+          row.projectId === projectId ? { ...row, status } : row
+        )
+      );
+    }
+    socket.on("projectStatusUpdate", handleStatusUpdate);
+    return () => {
+      socket.off("projectStatusUpdate", handleStatusUpdate);
+    };
+  }, []);
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -149,7 +166,7 @@ export function ProjectTable({
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
-            {rows.map((row) => {
+            {tableRows.map((row) => {
                  
               return (
                 <TableRow hover key={row._id} >

@@ -79,7 +79,8 @@ const { checkSession } = useUser();
 
 	fetchData();
   }, [router]);
-  
+
+
 
 const paginatedProjects = React.useMemo(() => {
   const filtered = !searchTerm.trim()
