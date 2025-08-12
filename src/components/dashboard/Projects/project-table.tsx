@@ -88,10 +88,24 @@ export function ProjectTable({
   const joinedProjectsRef = React.useRef(new Set());
 
   React.useEffect(() => {
+  if (!rows || rows.length === 0) {
+    // Clear localStorage
+    localStorage.removeItem("projects");
+
+    // Leave all joined socket rooms
+    joinedProjectsRef.current.forEach((roomKey) => {
+      const [vendorId, projectCategory] = roomKey.split("_");
+      socket.emit("leave_project", { vendorId, projectCategory });
+      console.log(`Left room: ${roomKey}`);
+    });
+    joinedProjectsRef.current.clear();
+  }
+}, [rows]);
+
+  React.useEffect(() => {
     projects.forEach((p) => {
       if (p.vendorId === user?.email) {
         const roomKey = `${p.vendorId}_${p.projectCategory}`;
-        console.log("project category", p.projectCategory)
 
         if (!joinedProjectsRef.current.has(roomKey)) {
           socket.emit("join_project", {
@@ -136,10 +150,7 @@ export function ProjectTable({
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
             {rows.map((row) => {
-              console.log("business Category", row.businessCategory)
-              console.log("business Category match", totalLeadsMap[row.businessCategory])
-
-
+                 
               return (
                 <TableRow hover key={row._id} >
 
