@@ -106,43 +106,62 @@ export function ProjectTable({
 }, [rows]);
 
   React.useEffect(() => {
-    projects.forEach((p: any) => {
-      // Leave all joined socket rooms
-      joinedProjectsRef.current.forEach((roomKey) => {
-        const [vendorId, projectCategory] = roomKey.split("_");
-        socket.emit("leave_project", { vendorId, projectCategory });
-        console.log(`Left room: ${roomKey}`);
-      });
-      joinedProjectsRef.current.clear();
-      return;
-    },
-    projects.forEach((p) => {
-      if (p.vendorId === user?.email) {
-        const roomKey = `${p.vendorId}_${p.projectCategory}`;
+  if (!projects || projects.length === 0 || !user?.email) {
+    // Leave all rooms if no projects
+    joinedProjectsRef.current.forEach((roomKey) => {
+      const [vendorId, projectCategory] = roomKey.split("_");
+      socket.emit("leave_project", { vendorId, projectCategory });
+      console.log(`Left room: ${roomKey}`);
+    });
+    joinedProjectsRef.current.clear();
+    return;
+  }
 
-        if (!joinedProjectsRef.current.has(roomKey)) {
-          socket.emit("join_project", {
-            vendorId: p.vendorId,
-            projectCategory: p.projectCategory,
-          });
-          joinedProjectsRef.current.add(roomKey);
-          console.log(`Joined room: ${roomKey}`);
-        }
+  // First leave all existing rooms
+  joinedProjectsRef.current.forEach((roomKey) => {
+    const [vendorId, projectCategory] = roomKey.split("_");
+    socket.emit("leave_project", { vendorId, projectCategory });
+    console.log(`Left room: ${roomKey}`);
+  });
+  joinedProjectsRef.current.clear();
+
+  // Join rooms for current projects
+  projects.forEach((p: any) => {
+    if (p.vendorId === user.email) {
+      const roomKey = `${p.vendorId}_${p.projectCategory}`;
+      if (!joinedProjectsRef.current.has(roomKey)) {
+        socket.emit("join_project", {
+          vendorId: p.vendorId,
+          projectCategory: p.projectCategory,
+        });
+        joinedProjectsRef.current.add(roomKey);
+        console.log(`Joined room: ${roomKey}`);
       }
-    }),
+    }
+  });
 
-    socket.on("total_lead", ({ projectCategory, count }) => {
-      console.log(`Updated count for ${projectCategory}: ${count}`);
-      setTotalLeadsMap((prev) => ({
-        ...prev,
-        [projectCategory]: count,
-      }));
-    }),
+  // Socket event listener for total leads
+  const handleTotalLead = ({ projectCategory, count }: { projectCategory: string; count: number }) => {
+    console.log(`Updated count for ${projectCategory}: ${count}`);
+    setTotalLeadsMap(prev => ({
+      ...prev,
+      [projectCategory]: count,
+    }));
+  };
 
-    return () => {
-      socket.off("total_lead");
-    };
-  }, [projects]);
+  socket.on("total_lead", handleTotalLead);
+
+  // Cleanup when projects change or component unmounts
+  return () => {
+    socket.off("total_lead", handleTotalLead);
+    joinedProjectsRef.current.forEach((roomKey) => {
+      const [vendorId, projectCategory] = roomKey.split("_");
+      socket.emit("leave_project", { vendorId, projectCategory });
+      console.log(`Left room: ${roomKey}`);
+    });
+    joinedProjectsRef.current.clear();
+  };
+}, [projects, user]);
 
  React.useEffect(() => {
     setTableRows(rows);
