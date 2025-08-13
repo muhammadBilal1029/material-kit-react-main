@@ -137,7 +137,7 @@ export function ProjectTable({
         ...prev,
         [projectCategory]: count,
       }));
-    });
+    }),
 
     return () => {
       socket.off("total_lead");
