@@ -115,7 +115,7 @@ export function ProjectTable({
       });
       joinedProjectsRef.current.clear();
       return;
-    }
+    },
     projects.forEach((p) => {
       if (p.vendorId === user?.email) {
         const roomKey = `${p.vendorId}_${p.projectCategory}`;
