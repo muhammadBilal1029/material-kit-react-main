@@ -129,7 +129,7 @@ export function ProjectTable({
           console.log(`Joined room: ${roomKey}`);
         }
       }
-    });
+    }),
 
     socket.on("total_lead", ({ projectCategory, count }) => {
       console.log(`Updated count for ${projectCategory}: ${count}`);
