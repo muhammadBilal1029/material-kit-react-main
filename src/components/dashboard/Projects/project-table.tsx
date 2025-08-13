@@ -178,13 +178,7 @@ export function ProjectTable({
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
-<<<<<<< Updated upstream
             {tableRows.map((row) => {
-                 
-=======
-            {rows.map((row) => {
-
->>>>>>> Stashed changes
               return (
                 <TableRow hover key={row._id} >
 
