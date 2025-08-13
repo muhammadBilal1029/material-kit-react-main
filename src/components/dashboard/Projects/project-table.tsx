@@ -94,7 +94,7 @@ export function ProjectTable({
       // Clear localStorage
       localStorage.removeItem("projects");
 
-<<<<<<< Updated upstream
+
     // Leave all joined socket rooms
     joinedProjectsRef.current.forEach((roomKey) => {
       const [vendorId, projectCategory] = roomKey.split("_");
@@ -107,7 +107,6 @@ export function ProjectTable({
 
   React.useEffect(() => {
     projects.forEach((p: any) => {
-=======
       // Leave all joined socket rooms
       joinedProjectsRef.current.forEach((roomKey) => {
         const [vendorId, projectCategory] = roomKey.split("_");
@@ -118,7 +117,6 @@ export function ProjectTable({
       return;
     }
     projects.forEach((p) => {
->>>>>>> Stashed changes
       if (p.vendorId === user?.email) {
         const roomKey = `${p.vendorId}_${p.projectCategory}`;
 
