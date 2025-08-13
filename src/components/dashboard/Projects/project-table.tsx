@@ -90,10 +90,11 @@ export function ProjectTable({
 
 
   React.useEffect(() => {
-  if (!rows || rows.length === 0) {
-    // Clear localStorage
-    localStorage.removeItem("projects");
+    if (!rows || rows.length === 0) {
+      // Clear localStorage
+      localStorage.removeItem("projects");
 
+<<<<<<< Updated upstream
     // Leave all joined socket rooms
     joinedProjectsRef.current.forEach((roomKey) => {
       const [vendorId, projectCategory] = roomKey.split("_");
@@ -106,6 +107,18 @@ export function ProjectTable({
 
   React.useEffect(() => {
     projects.forEach((p: any) => {
+=======
+      // Leave all joined socket rooms
+      joinedProjectsRef.current.forEach((roomKey) => {
+        const [vendorId, projectCategory] = roomKey.split("_");
+        socket.emit("leave_project", { vendorId, projectCategory });
+        console.log(`Left room: ${roomKey}`);
+      });
+      joinedProjectsRef.current.clear();
+      return;
+    }
+    projects.forEach((p) => {
+>>>>>>> Stashed changes
       if (p.vendorId === user?.email) {
         const roomKey = `${p.vendorId}_${p.projectCategory}`;
 
@@ -167,8 +180,13 @@ export function ProjectTable({
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
+<<<<<<< Updated upstream
             {tableRows.map((row) => {
                  
+=======
+            {rows.map((row) => {
+
+>>>>>>> Stashed changes
               return (
                 <TableRow hover key={row._id} >
 
