@@ -90,10 +90,9 @@ export function ProjectTable({
 
 
   React.useEffect(() => {
-    if (!rows || rows.length === 0) {
-      // Clear localStorage
-      localStorage.removeItem("projects");
-
+  if (!rows || rows.length === 0) {
+    // Clear localStorage
+    localStorage.removeItem("projects");
 
     // Leave all joined socket rooms
     joinedProjectsRef.current.forEach((roomKey) => {
@@ -106,62 +105,33 @@ export function ProjectTable({
 }, [rows]);
 
   React.useEffect(() => {
-  if (!projects || projects.length === 0 || !user?.email) {
-    // Leave all rooms if no projects
-    joinedProjectsRef.current.forEach((roomKey) => {
-      const [vendorId, projectCategory] = roomKey.split("_");
-      socket.emit("leave_project", { vendorId, projectCategory });
-      console.log(`Left room: ${roomKey}`);
-    });
-    joinedProjectsRef.current.clear();
-    return;
-  }
+    projects.forEach((p: any) => {
+      if (p.vendorId === user?.email) {
+        const roomKey = `${p.vendorId}_${p.projectCategory}`;
 
-  // First leave all existing rooms
-  joinedProjectsRef.current.forEach((roomKey) => {
-    const [vendorId, projectCategory] = roomKey.split("_");
-    socket.emit("leave_project", { vendorId, projectCategory });
-    console.log(`Left room: ${roomKey}`);
-  });
-  joinedProjectsRef.current.clear();
-
-  // Join rooms for current projects
-  projects.forEach((p: any) => {
-    if (p.vendorId === user.email) {
-      const roomKey = `${p.vendorId}_${p.projectCategory}`;
-      if (!joinedProjectsRef.current.has(roomKey)) {
-        socket.emit("join_project", {
-          vendorId: p.vendorId,
-          projectCategory: p.projectCategory,
-        });
-        joinedProjectsRef.current.add(roomKey);
-        console.log(`Joined room: ${roomKey}`);
+        if (!joinedProjectsRef.current.has(roomKey)) {
+          socket.emit("join_project", {
+            vendorId: p.vendorId,
+            projectCategory: p.projectCategory,
+          });
+          joinedProjectsRef.current.add(roomKey);
+          console.log(`Joined room: ${roomKey}`);
+        }
       }
-    }
-  });
-
-  // Socket event listener for total leads
-  const handleTotalLead = ({ projectCategory, count }: { projectCategory: string; count: number }) => {
-    console.log(`Updated count for ${projectCategory}: ${count}`);
-    setTotalLeadsMap(prev => ({
-      ...prev,
-      [projectCategory]: count,
-    }));
-  };
-
-  socket.on("total_lead", handleTotalLead);
-
-  // Cleanup when projects change or component unmounts
-  return () => {
-    socket.off("total_lead", handleTotalLead);
-    joinedProjectsRef.current.forEach((roomKey) => {
-      const [vendorId, projectCategory] = roomKey.split("_");
-      socket.emit("leave_project", { vendorId, projectCategory });
-      console.log(`Left room: ${roomKey}`);
     });
-    joinedProjectsRef.current.clear();
-  };
-}, [projects, user]);
+
+    socket.on("total_lead", ({ projectCategory, count }) => {
+      console.log(`Updated count for ${projectCategory}: ${count}`);
+      setTotalLeadsMap((prev) => ({
+        ...prev,
+        [projectCategory]: count,
+      }));
+    });
+
+    return () => {
+      socket.off("total_lead");
+    };
+  }, [projects]);
 
  React.useEffect(() => {
     setTableRows(rows);
@@ -198,6 +168,7 @@ export function ProjectTable({
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
             {tableRows.map((row) => {
+                 
               return (
                 <TableRow hover key={row._id} >
 
