@@ -59,7 +59,7 @@ export function ProjectTable({
   //   return rows.map((customer) => customer.id);
   // }, [rows]);
   const [isPause, setIsPause] = React.useState(false);
-   const [tableRows, setTableRows] = React.useState<Customer[]>(rows);
+  const [tableRows, setTableRows] = React.useState<Customer[]>(rows);
   const router = useRouter();
   const handleViewLeads = async (row: Customer) => {
     router.push(`/dashboard/project/specific-leads?category=${encodeURIComponent(row.businessCategory)}`);
@@ -90,19 +90,18 @@ export function ProjectTable({
 
 
   React.useEffect(() => {
-  if (!rows || rows.length === 0) {
-    // Clear localStorage
-    localStorage.removeItem("projects");
-
-    // Leave all joined socket rooms
-    joinedProjectsRef.current.forEach((roomKey) => {
-      const [vendorId, projectCategory] = roomKey.split("_");
-      socket.emit("leave_project", { vendorId, projectCategory });
-      console.log(`Left room: ${roomKey}`);
-    });
-    joinedProjectsRef.current.clear();
-  }
-}, [rows]);
+    if (!rows || rows.length === 0) {
+      // Clear localStorage
+      localStorage.removeItem("projects");
+      // Leave all joined socket rooms
+      joinedProjectsRef.current.forEach((roomKey) => {
+        const [vendorId, projectCategory] = roomKey.split("_");
+        socket.emit("leave_project", { vendorId, projectCategory });
+        console.log(`Left room: ${roomKey}`);
+      });
+      joinedProjectsRef.current.clear();
+    }
+  }, [rows]);
 
   React.useEffect(() => {
     projects.forEach((p: any) => {
@@ -133,7 +132,7 @@ export function ProjectTable({
     };
   }, [projects]);
 
- React.useEffect(() => {
+  React.useEffect(() => {
     setTableRows(rows);
   }, [rows]);
 
@@ -167,8 +166,8 @@ export function ProjectTable({
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
+
             {tableRows.map((row) => {
-                 
               return (
                 <TableRow hover key={row._id} >
 
