@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import io from 'socket.io-client'
 // import { useSelection } from '@/hooks/use-selection';
-const socket = io('http://localhost:5000')
+const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 function noop(): void {
   // do nothing
 }

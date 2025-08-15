@@ -37,7 +37,7 @@ export interface Jobs {
   link: string;            // required
   salary?: string;         // optional
   postedDate?: Date;       // optional
-  scrapedAt?: Date; 
+  scrapedAt?: Date;
 }
 
 interface JobsTableProps {
@@ -45,9 +45,9 @@ interface JobsTableProps {
   page?: number;
   rows: Jobs[];
   rowsPerPage?: number;
-   onPageChange: (_: any, newPage: number) => void;
+  onPageChange: (_: any, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    rowsPerPageOptions?: Array<number | { label: string; value: number }>;
+  rowsPerPageOptions?: Array<number | { label: string; value: number }>;
   onCancel?: (_id: string) => void;
 }
 
@@ -58,7 +58,7 @@ export function JobsCards({
   rowsPerPage,
   onPageChange,
   onRowsPerPageChange,
-    rowsPerPageOptions = [10, 25, 50, 100],
+  rowsPerPageOptions = [10, 25, 50, 100],
 }: JobsTableProps): React.JSX.Element {
   return (
     // <form
@@ -108,45 +108,51 @@ export function JobsCards({
     //       <Button variant="contained">Save changes</Button>
     //     </CardActions>
     //   </Card>
-     <Card>
+    <Card>
       <Box sx={{ overflowX: 'auto' }}>
         <Table sx={{ minWidth: '800px' }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}} >Source</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Title</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Company</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Location</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Salary</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Posted Date</TableCell>
-              <TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Action</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >Source</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Title</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Company</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Salary</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Posted Date</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Scrape Date</TableCell>
+              <TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Action</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody style={{color:"#525f7f", fontWeight:"bold"}}>
+          <TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
             {rows.map((row, index) => (
               <TableRow hover key={index}>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.source}</TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.title}</TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.company ?? '-'}</TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.location ?? '-'}</TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{row.salary ?? '-'}</TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.source}</TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.title}</TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.company ?? '-'}</TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.location ?? '-'}</TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.salary ?? '-'}</TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
                   {row.postedDate
                     ? new Date(row.postedDate).toLocaleDateString()
                     : '-'}
                 </TableCell>
-                <TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+                  {row.scrapedAt
+                    ? new Date(row.scrapedAt).toLocaleDateString()
+                    : '-'}
+                </TableCell>
+                <TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
                   <Button
-                   sx={{
-    color: 'white',
-    borderColor: '#0fb9d8',
-    backgroundColor: '#0fb9d8',
-    '&:hover': {
-      backgroundColor: '0fb9d8', // light transparent background on hover
-      borderColor: '#0da5c0',
-      color:"black"
-    },
-  }}
+                    sx={{
+                      color: 'white',
+                      borderColor: '#0fb9d8',
+                      backgroundColor: '#0fb9d8',
+                      '&:hover': {
+                        backgroundColor: '0fb9d8', // light transparent background on hover
+                        borderColor: '#0da5c0',
+                        color: "black"
+                      },
+                    }}
                     size="small"
                     variant="outlined"
                     href={row.link}

@@ -28,7 +28,7 @@ import { useUser } from "@/hooks/use-user";
 // import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from "@/components/dashboard/Leads/leads-table";
 
-const socket = io("http://localhost:5000");
+const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
 export default function Page(): React.JSX.Element {
 	const router = useRouter();
@@ -275,7 +275,6 @@ export default function Page(): React.JSX.Element {
 			console.log("📢 New lead received:", newLead);
 			setLeads((prevLeads) => [newLead, ...prevLeads]);
 		});
-
 
 		// Cleanup
 		return () => {
