@@ -118,7 +118,7 @@ export default function Page(): React.JSX.Element {
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
-    if (rowsPerPages === -1) return filtered;
+    // if (rowsPerPages === -1) return filtered;
     return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
   }, [searchTerm, jobs, pages, rowsPerPages]);
 
