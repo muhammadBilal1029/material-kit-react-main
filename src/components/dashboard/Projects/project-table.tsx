@@ -188,23 +188,6 @@ export function ProjectTable({
                     {row.status === 'Running' ? (
                       <>
                         <Button
-                          variant="outlined"
-                          sx={{
-                            color: 'white',
-                            borderColor: '#0fb9d8',
-                            backgroundColor: '#0fb9d8',
-                            '&:hover': {
-                              backgroundColor: '0fb9d8', // light transparent background on hover
-                              borderColor: '#0da5c0',
-                              color: "black"
-                            },
-                          }}
-                          size="small"
-                          onClick={() => handleCancel(row.projectId)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
                           variant="contained"
                           size="small"
                           sx={{
@@ -221,6 +204,24 @@ export function ProjectTable({
                         >
                           View Leads
                         </Button>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            color: 'white',
+                            borderColor: '#0fb9d8',
+                            backgroundColor: '#0fb9d8',
+                            '&:hover': {
+                              backgroundColor: '0fb9d8', // light transparent background on hover
+                              borderColor: '#0da5c0',
+                              color: "black"
+                            },
+                          }}
+                          size="small"
+                          onClick={() => handleCancel(row.projectId)}
+                        >
+                          Cancel
+                        </Button>
+
                         {isPause ? <Button
                           variant="outlined"
                           sx={{
