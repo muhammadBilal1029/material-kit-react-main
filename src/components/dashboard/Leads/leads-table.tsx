@@ -30,6 +30,7 @@ function noop(): void {
 	// do nothing
 }
 export interface Customer {
+	city: string,
 	_id: string;
 	storeName: string;
 	email: string;
@@ -109,6 +110,7 @@ export function LeadsTable({
 					<TableHead>
 						<TableRow>
 
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >City</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >ID</TableCell>
 
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Name</TableCell>
@@ -138,6 +140,7 @@ export function LeadsTable({
 								return (
 									<TableRow hover key={index}>
 
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.city}</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{index++}</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											<Stack sx={{ alignItems: "center" }} direction="row" spacing={2}>

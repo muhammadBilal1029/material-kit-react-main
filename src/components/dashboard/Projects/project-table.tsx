@@ -204,6 +204,23 @@ export function ProjectTable({
                         >
                           Cancel
                         </Button>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{
+                            color: 'white',
+                            borderColor: '#0fb9d8',
+                            backgroundColor: '#0fb9d8',
+                            '&:hover': {
+                              backgroundColor: '0fb9d8', // light transparent background on hover
+                              borderColor: '#0da5c0',
+                              color: "black"
+                            },
+                          }}
+                          onClick={() => handleViewLeads(row)}
+                        >
+                          View Leads
+                        </Button>
                         {isPause ? <Button
                           variant="outlined"
                           sx={{

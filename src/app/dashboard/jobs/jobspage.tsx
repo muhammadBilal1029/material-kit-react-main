@@ -76,7 +76,9 @@ export default function Page(): React.JSX.Element {
         }
         // Join vendor room
         socket.emit("joinVendor", user.email);
-        setjobs(data);
+        // When setting jobs from API response
+        setjobs(Array.isArray(data) ? data : []);
+
         setLoading(false);
       } catch (err) {
         console.error('Failed to fetch leads:', err);
@@ -100,6 +102,7 @@ export default function Page(): React.JSX.Element {
 
     socket.on("scrape_complete", (info) => {
       console.log("Scraping complete:", info);
+      toast.success(info.message || "Scraping complete")
       setScrapingLoading(false);
     });
 
@@ -111,16 +114,22 @@ export default function Page(): React.JSX.Element {
 
 
   const paginatedJobs = React.useMemo(() => {
+    const jobsArray = Array.isArray(jobs) ? jobs : [];
+
     const filtered = !searchTerm.trim()
-      ? jobs
-      : jobs.filter((job) =>
+      ? jobsArray
+      : jobsArray.filter((job) =>
         Object.values(job).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
-    // if (rowsPerPages === -1) return filtered;
-    return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
+
+    return filtered.slice(
+      pages * rowsPerPages,
+      pages * rowsPerPages + rowsPerPages
+    );
   }, [searchTerm, jobs, pages, rowsPerPages]);
+
 
 
   const handleAddJobs = async () => {
@@ -159,7 +168,9 @@ export default function Page(): React.JSX.Element {
         return;
       }
 
-      setjobs(data);
+      // When setting jobs from API response
+      setjobs(Array.isArray(data) ? data : []);
+
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch leads:', err);
