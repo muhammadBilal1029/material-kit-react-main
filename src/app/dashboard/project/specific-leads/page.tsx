@@ -29,9 +29,12 @@ import Papa from "papaparse";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaInstagram, FaLinkedin, FaRegStar, FaStar, FaStarHalfAlt, FaYoutube } from "react-icons/fa"; // at the top
 import * as XLSX from "xlsx";
+import io from "socket.io-client";
 
 // Define Customer type here or import properly
 import { Customer } from "@/components/dashboard/Leads/leads-table";
+
+const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`)
 
 export default function Page() {
 	const hasFetchedRef = React.useRef(false);
@@ -71,6 +74,7 @@ export default function Page() {
 					toast.error(`No leads found for ${businessCategory}`);
 					setspecificLeads([]);
 				} else {
+					socket.emit("join_lead", { projectCategory: businessCategory });
 					setspecificLeads(data.data);
 				}
 			} catch (error) {
@@ -81,6 +85,11 @@ export default function Page() {
 		};
 
 		fetchLeads();
+
+		socket.on("lead_details", (lead) => {
+			console.log("Live update for my lead:", lead);
+			setspecificLeads(lead);
+		});
 	}, [businessCategory]);
 
 	const handleBack = () => {
@@ -90,8 +99,8 @@ export default function Page() {
 		const filtered = !searchTerm.trim()
 			? specificleads
 			: specificleads.filter((lead) =>
-					Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
-				);
+				Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
+			);
 		return filtered;
 	}, [searchTerm, specificleads]);
 
@@ -316,14 +325,14 @@ export default function Page() {
 						sx={{ maxWidth: "400px" }}
 					/>
 
-					<Button onClick={exportToCSV} className="sm:flex" variant="contained"  sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button onClick={exportToCSV} className="sm:flex" variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
 						Export To CSV
 					</Button>
-					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
 						Export To Pdf
 					</Button>
 
-					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2,backgroundColor:"#0fb9d8" }}>
+					<Button onClick={exportToExcel} variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
 						Export To Excel
 					</Button>
 				</Stack>
@@ -343,33 +352,35 @@ export default function Page() {
 						<Table sx={{ minWidth: 800 }}>
 							<TableHead>
 								<TableRow>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>ID</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Name</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Email</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Location</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}} >Category</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Search Category</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Phone</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Google Map</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Ratings</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Stars</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Reviews</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>About</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Website</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Facebook</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>LinkedIn</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Instagram</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>YouTube</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Logo</TableCell>
-									<TableCell sx={{color:"#525f7f", fontSize:"16px",fontWeight:"bold"}}>Image</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>City</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>ID</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Name</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Email</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >Category</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Search Category</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Phone</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Google Map</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Ratings</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Stars</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Reviews</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>About</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Website</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Facebook</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>LinkedIn</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Instagram</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>YouTube</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Logo</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Image</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
 								{paginatedLeads.map((lead) => (
 									<TableRow hover key={index}>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{index++}</TableCell>
-										
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.city}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{index++}</TableCell>
+
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.storeName ? (
 												<Tooltip title={lead.storeName}>
 													<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
@@ -380,8 +391,8 @@ export default function Page() {
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{lead.email ? lead.email : "No Email"}</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.email ? lead.email : "No Email"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.address ? (
 												<Tooltip title={lead.address}>
 													<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
@@ -392,9 +403,9 @@ export default function Page() {
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{lead.category ? lead.category : "No Category"}</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{lead.projectCategory ? lead.projectCategory : "No Project Category"}</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.category ? lead.category : "No Category"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.projectCategory ? lead.projectCategory : "No Project Category"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.phone ? (
 												<a
 													style={{ color: "rgba(40, 39, 39, 0.87)", textDecoration: "none" }}
@@ -406,7 +417,7 @@ export default function Page() {
 												"No Phone"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.googleUrl ? (
 												<a href={lead.googleUrl} target="_blank" rel="noopener noreferrer">
 													<svg
@@ -425,8 +436,8 @@ export default function Page() {
 											)}
 										</TableCell>
 
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{lead.ratingText}</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.ratingText}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											<Box
 												sx={{
 													display: "flex",
@@ -438,8 +449,8 @@ export default function Page() {
 												{renderStars(Number(lead.stars))}
 											</Box>
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>{lead.numberOfReviews}</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.numberOfReviews}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.about ? (
 												<Tooltip title={lead.about}>
 													<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
@@ -450,7 +461,7 @@ export default function Page() {
 												"No About"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{" "}
 											{lead.bizWebsite ? (
 												<Tooltip title={lead.bizWebsite}>
@@ -467,7 +478,7 @@ export default function Page() {
 												"No Website"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.socialLinks?.facebook ? (
 												<a href={lead.socialLinks.facebook} target="_blank" rel="noopener noreferrer">
 													<FaFacebook color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -476,7 +487,7 @@ export default function Page() {
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.socialLinks?.linkedin ? (
 												<a href={lead.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
 													<FaLinkedin color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -485,7 +496,7 @@ export default function Page() {
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.socialLinks?.instagram ? (
 												<a href={lead.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
 													<FaInstagram color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -494,7 +505,7 @@ export default function Page() {
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.socialLinks?.youtube ? (
 												<a href={lead.socialLinks.youtube} target="_blank" rel="noopener noreferrer">
 													<FaYoutube color="rgba(40, 39, 39, 0.87)" size={30} />
@@ -503,7 +514,7 @@ export default function Page() {
 												"No Image"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.logoUrl ? (
 												<Tooltip title={lead.logoUrl}>
 													<a href={lead.logoUrl} target="_blank" rel="noopener noreferrer">
@@ -519,7 +530,7 @@ export default function Page() {
 												"No Logo"
 											)}
 										</TableCell>
-										<TableCell sx={{color:"#525f7f", fontSize:"16px"}}>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.imageUrl ? (
 												<Tooltip title={lead.imageUrl}>
 													<a href={lead.imageUrl} target="_blank" rel="noopener noreferrer">
