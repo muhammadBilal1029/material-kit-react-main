@@ -34,8 +34,6 @@ import io from "socket.io-client";
 // Define Customer type here or import properly
 import { Customer } from "@/components/dashboard/Leads/leads-table";
 
-const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`)
-
 export default function Page() {
 	const hasFetchedRef = React.useRef(false);
 	const searchParams = useSearchParams();
@@ -47,10 +45,16 @@ export default function Page() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10); // You can adjust this
 
+	// socket setup inside useEffect
 	useEffect(() => {
 		if (!businessCategory || hasFetchedRef.current) return;
 		hasFetchedRef.current = true;
 
+		const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
+
+		socket.emit("join_lead", businessCategory);
+
+		// fetch initial leads
 		const fetchLeads = async () => {
 			try {
 				const res = await fetch(
@@ -65,17 +69,11 @@ export default function Page() {
 				);
 
 				const data = await res.json();
-				console.log("Specific leads data", data);
-
 				if (!res.ok || !data.success) {
 					toast.error(`Failed to fetch leads for ${businessCategory}`);
 					setspecificLeads([]);
-				} else if (Array.isArray(data.data) && data.data.length === 0) {
-					toast.error(`No leads found for ${businessCategory}`);
-					setspecificLeads([]);
 				} else {
-					socket.emit("join_lead", { projectCategory: businessCategory });
-					setspecificLeads(data.data);
+					setspecificLeads(Array.isArray(data.data) ? data.data : []);
 				}
 			} catch (error) {
 				toast.error("Error fetching leads");
@@ -86,28 +84,43 @@ export default function Page() {
 
 		fetchLeads();
 
+		// live updates
 		socket.on("lead_details", (lead) => {
 			console.log("Live update for my lead:", lead);
-			setspecificLeads(lead);
+			if (Array.isArray(lead)) {
+				setspecificLeads(lead);
+			} else if (lead && typeof lead === "object") {
+				setspecificLeads((prev) => {
+					return [...prev, lead];
+				});
+			}
 		});
+
+		return () => {
+			socket.disconnect();
+		};
 	}, [businessCategory]);
 
-	const handleBack = () => {
-		window.history.back();
-	};
+	// search filter
 	const filteredLeads = React.useMemo(() => {
-		const filtered = !searchTerm.trim()
-			? specificleads
-			: specificleads.filter((lead) =>
-				Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
-			);
-		return filtered;
+		if (!searchTerm.trim()) return specificleads;
+		return specificleads.filter((lead) =>
+			Object.values(lead).some((value) =>
+				String(value).toLowerCase().includes(searchTerm.toLowerCase())
+			)
+		);
 	}, [searchTerm, specificleads]);
 
+	// pagination
 	const paginatedLeads = React.useMemo(() => {
 		if (rowsPerPage === -1) return filteredLeads;
 		return filteredLeads.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 	}, [filteredLeads, page, rowsPerPage]);
+
+
+	const handleBack = () => {
+		window.history.back();
+	};
 
 	const exportToCSV = () => {
 		const csv = Papa.unparse(filteredLeads);
