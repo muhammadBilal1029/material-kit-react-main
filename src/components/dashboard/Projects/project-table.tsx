@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import io from 'socket.io-client'
 // import { useSelection } from '@/hooks/use-selection';
-const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
+const socket = io("https://gofernets.run.place/unipullar");
 function noop(): void {
   // do nothing
 }
