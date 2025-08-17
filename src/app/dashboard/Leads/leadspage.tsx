@@ -28,8 +28,6 @@ import { useUser } from "@/hooks/use-user";
 // import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from "@/components/dashboard/Leads/leads-table";
 
-const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
-
 export default function Page(): React.JSX.Element {
 	const router = useRouter();
 	//
@@ -221,6 +219,7 @@ export default function Page(): React.JSX.Element {
 
 	React.useEffect(() => {
 		if (!user.email) return;
+		const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
 		const token = localStorage.getItem("auth-token");
 		if (!token) {

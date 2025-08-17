@@ -20,7 +20,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { toast } from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
 export default function Page(): React.JSX.Element {
   const router = useRouter();
@@ -39,6 +38,7 @@ export default function Page(): React.JSX.Element {
   const { checkSession } = useUser();
 
   React.useEffect(() => {
+    const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
     const fetchData = async () => {
       // Replace this with your real API call
       const token = localStorage.getItem("auth-token");
