@@ -50,7 +50,10 @@ export default function Page() {
 		if (!businessCategory || hasFetchedRef.current) return;
 		hasFetchedRef.current = true;
 
-		const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
+		const socket = io("https://gofernets.run.place",{
+  path: "/unipullar/socket.io",
+  transports: ["websocket", "polling"], // optional but good
+});
 
 		socket.emit("join_lead", businessCategory);
 
