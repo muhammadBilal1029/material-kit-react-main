@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 import io from 'socket.io-client'
 // import { useSelection } from '@/hooks/use-selection';
 const backendURL=`${process.env.NEXT_PUBLIC_BACKEND_URL}`;
-const socket = io(backendURL,{
+const socket = io(https://gofernets.run.place,{
   path: "/unipullar/socket.io",
   transports: ["websocket", "polling"], // optional but good
 });
