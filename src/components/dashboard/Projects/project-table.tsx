@@ -19,7 +19,8 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import io from 'socket.io-client'
 // import { useSelection } from '@/hooks/use-selection';
-const socket = io("https://gofernets.run.place/unipullar");
+const backendURL=`${process.env.NEXT_PUBLIC_BACKEND_URL}`;
+const socket = io(backendURL);
 function noop(): void {
   // do nothing
 }
@@ -60,7 +61,7 @@ export function ProjectTable({
   // }, [rows]);
   const [isPause, setIsPause] = React.useState(false);
   const [tableRows, setTableRows] = React.useState<Customer[]>(rows);
-  const backendURL=`${process.env.NEXT_PUBLIC_BACKEND_URL}`;
+
   const router = useRouter();
   const handleViewLeads = async (row: Customer) => {
     router.push(`/dashboard/project/specific-leads?category=${encodeURIComponent(row.businessCategory)}`);
