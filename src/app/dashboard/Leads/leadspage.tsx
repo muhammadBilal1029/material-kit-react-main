@@ -55,68 +55,7 @@ export default function Page(): React.JSX.Element {
 		a.click();
 		URL.revokeObjectURL(url);
 	};
-	//  const exportToCSV = () => {
-	//     const csvRows = [
-	//     [
-	//       "ID",
-	//       "Project Name",
-	//       "Name",
-	//       "Email",
-	//       "Address",
-	//       "Category",
-	//       "Phone",
-	//       "City",
-	//       "Google Url",
-	//       "Website",
-	//       "Rating",
-	//       "Stars",
-	//       "Reviews",
-	//       "About",
-	//       "Facebook",
-	//       "LinkedIn",
-	//       "Instagram",
-	//       "Youtube",
-	//       "Logo",
-	//       "Images",
-	//     ],
-	//     ...leads.map((lead) => [
-	//       lead.placeId,
-	//       lead.storeName,
-	//       lead.email,
-	//       lead.address,
-	//       lead.category,
-	//       lead.phone,
-	//       lead.city,
-	//       lead.googleUrl,
-	//       lead.bizWebsite,
-	//       lead.ratingText,
-	//       lead.stars,
-	//       lead.numberOfReviews,
-	//       lead.about,
-	//       lead.facebook || "N/A",
-	//       lead.linkedIn || "N/A",
-	//       lead.instagram || "N/A",
-	//       lead.youtube || "N/A",
-	//       lead.logoUrl || "N/A",
-	//       lead.images || "N/A",
-	//     ]),
-	//   ];
-
-	//   const csvContent = `data:text/csv;charset=utf-8,${csvRows
-	//     .map((row) => row.join(","))
-	//     .join("\n")}`;
-	//   const link = document.createElement("a");
-	//   link.href = encodeURI(csvContent);
-	//   link.download = "leads.csv";
-	//   link.click();
-	// };
-
-	// const exportToExcel = () => {
-	// 	const worksheet = XLSX.utils.json_to_sheet(leads);
-	// 	const workbook = XLSX.utils.book_new();
-	// 	XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-	// 	XLSX.writeFile(workbook, "leads.xlsx");
-	// };
+	
 	const exportToExcel = () => {
 		const ws = XLSX.utils.json_to_sheet(leads);
 		const wb = XLSX.utils.book_new();
@@ -124,57 +63,7 @@ export default function Page(): React.JSX.Element {
 		XLSX.writeFile(wb, "leads.xlsx");
 	};
 
-	// const exportToPDF = () => {
-	// 	const doc = new jsPDF();
-
-	// 	if (leads.length === 0) return;
-
-	// 	// Get base columns (excluding nested object)
-	// 	const baseColumns = Object.keys(leads[0]).filter((col) => col !== "socialLinks");
-
-	// 	// Flattened socialLinks keys (if present)
-	// 	const socialLinkKeys = leads[0].socialLinks
-	// 		? Object.keys(leads[0].socialLinks)
-	// 		: ["facebook", "linkedin", "instagram", "youtube"];
-
-	// 	// Prepare headers
-	// 	const headers = [
-	// 		...baseColumns.map((col) => ({ content: col })),
-	// 		...socialLinkKeys.map((key) => ({ content: `socialLinks.${key}` })),
-	// 	];
-
-	// 	// Prepare row data
-	// 	const rows = leads.map((lead) => {
-	// 		const flatRow = [];
-
-	// 		// Add base fields
-	// 		for (const key of baseColumns) {
-	// 			const value = lead[key];
-
-	// 			if (value && typeof value === "object") {
-	// 				flatRow.push(Object.values(value).join(", "));
-	// 			} else {
-	// 				flatRow.push(value ?? "");
-	// 			}
-	// 		}
-
-	// 		// Add socialLinks fields
-	// 		for (const key of socialLinkKeys) {
-	// 		const linkValue = lead.socialLinks?.[key as keyof typeof lead.socialLinks] ?? "";
-	// 			flatRow.push(linkValue);
-	// 		}
-
-	// 		return flatRow;
-	// 	});
-
-	// 	autoTable(doc, {
-	// 		head: [headers],
-	// 		body: rows,
-	// 		styles: { fontSize: 8 }, // optional for better fit
-	// 	});
-
-	// 	doc.save("leads.pdf");
-	// };
+	
 	const exportToPDF = () => {
 		const doc = new jsPDF();
 		doc.setFontSize(16);

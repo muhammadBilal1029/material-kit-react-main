@@ -12,7 +12,7 @@ import type { SxProps } from '@mui/material/styles';
 import { ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import type { ApexOptions } from 'apexcharts';
-
+import { UserContext } from '@/contexts/user-context';
 import { Chart } from '@/components/core/chart';
 
 export interface SalesProps {
@@ -22,6 +22,7 @@ export interface SalesProps {
 
 export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
   const chartOptions = useChartOptions();
+  const {totalLeads} = React.useContext(UserContext);
 
   return (
     <Card sx={sx}>
@@ -31,7 +32,8 @@ export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
             Sync
           </Button>
         }
-        title="Sales"
+        title="Leads"
+        subheader={`Total Leads: ${totalLeads ?? 0}`}
       />
       <CardContent>
         <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />

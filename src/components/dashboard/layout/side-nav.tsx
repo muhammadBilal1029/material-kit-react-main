@@ -66,10 +66,10 @@ export function SideNav(): React.JSX.Element {
 				>
 					<Box sx={{ flex: "1 1 auto" }}>
 						<Typography color="var(--mui-palette-neutral-400)" variant="body2">
-							Unipuler
+							Brainscraft
 						</Typography>
 						<Typography color="inherit" variant="subtitle1">
-							Multivendor
+							Leads-Generation
 						</Typography>
 					</Box>
 				</Box>

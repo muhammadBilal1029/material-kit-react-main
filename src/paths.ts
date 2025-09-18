@@ -13,6 +13,7 @@ export const paths = {
     myApplications: '/dashboard/jobs/myApplications',
     allApplicants: '/dashboard/jobs/allApplicants',
     freelancerJobs: '/dashboard/jobs/freelancerJobs',
+    persons: '/dashboard/persons',
 
   },
   errors: { notFound: '/errors/not-found' },
