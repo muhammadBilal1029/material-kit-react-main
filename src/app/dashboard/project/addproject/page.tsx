@@ -88,6 +88,7 @@ export default function Page() {
 				projectName: "",
 				city: "",
 				businessCategory: "",
+				country: "",
 			});
 			router.push("/dashboard/project");
 		} catch (err: any) {
