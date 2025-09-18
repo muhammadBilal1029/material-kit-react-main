@@ -28,8 +28,9 @@ import jsPDF from "jspdf";
 import Papa from "papaparse";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaInstagram, FaLinkedin, FaRegStar, FaStar, FaStarHalfAlt, FaYoutube } from "react-icons/fa"; // at the top
-import * as XLSX from "xlsx";
+
 import io from "socket.io-client";
+import * as XLSX from "xlsx";
 
 // Define Customer type here or import properly
 import { Customer } from "@/components/dashboard/Leads/leads-table";
@@ -50,10 +51,10 @@ export default function Page() {
 		if (!businessCategory || hasFetchedRef.current) return;
 		hasFetchedRef.current = true;
 
-		const socket = io("https://gofernets.run.place",{
-  path: "/unipullar/socket.io",
-  transports: ["websocket", "polling"], // optional but good
-});
+		const socket = io("https://gofernets.run.place", {
+			path: "/unipullar/socket.io",
+			transports: ["websocket", "polling"], // optional but good
+		});
 
 		socket.emit("join_lead", businessCategory);
 
@@ -73,13 +74,14 @@ export default function Page() {
 
 				const data = await res.json();
 				if (!res.ok || !data.success) {
-					toast.error(`Failed to fetch leads for ${businessCategory}`);
+					toast.error(`No leads found for ${businessCategory}`);
 					setspecificLeads([]);
 				} else {
-					setspecificLeads(Array.isArray(data.data) ? data.data : []);
+					const filteredLeads = data.data.filter((lead: Customer) => lead.storeName !== "");
+					setspecificLeads(Array.isArray(filteredLeads) ? filteredLeads : []);
 				}
 			} catch (error) {
-				toast.error("Error fetching leads");
+				toast.error(`Failed to fetch leads for ${businessCategory}`);
 			} finally {
 				setLoading(false);
 			}
@@ -90,8 +92,9 @@ export default function Page() {
 		// live updates
 		socket.on("lead_details", (lead) => {
 			console.log("Live update for my lead:", lead);
-			if (Array.isArray(lead)) {
-				setspecificLeads(lead);
+			const filteredLead = lead.filter((lead: Customer) => lead.storeName !== "");
+			if (Array.isArray(filteredLead)) {
+				setspecificLeads(filteredLead);
 			} else if (lead && typeof lead === "object") {
 				setspecificLeads((prev) => {
 					return [...prev, lead];
@@ -108,9 +111,7 @@ export default function Page() {
 	const filteredLeads = React.useMemo(() => {
 		if (!searchTerm.trim()) return specificleads;
 		return specificleads.filter((lead) =>
-			Object.values(lead).some((value) =>
-				String(value).toLowerCase().includes(searchTerm.toLowerCase())
-			)
+			Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
 		);
 	}, [searchTerm, specificleads]);
 
@@ -119,7 +120,6 @@ export default function Page() {
 		if (rowsPerPage === -1) return filteredLeads;
 		return filteredLeads.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 	}, [filteredLeads, page, rowsPerPage]);
-
 
 	const handleBack = () => {
 		window.history.back();
@@ -136,67 +136,6 @@ export default function Page() {
 		URL.revokeObjectURL(url);
 	};
 
-	//     const csvRows = [
-	//     [
-	//       "ID",
-	//       "Project Name",
-	//       "Name",
-	//       "Email",
-	//       "Address",
-	//       "Category",
-	//       "Phone",
-	//       "City",
-	//       "Google Url",
-	//       "Website",
-	//       "Rating",
-	//       "Stars",
-	//       "Reviews",
-	//       "About",
-	//       "Facebook",
-	//       "LinkedIn",
-	//       "Instagram",
-	//       "Youtube",
-	//       "Logo",
-	//       "Images",
-	//     ],
-	//     ...leads.map((lead) => [
-	//       lead.placeId,
-	//       lead.storeName,
-	//       lead.email,
-	//       lead.address,
-	//       lead.category,
-	//       lead.phone,
-	//       lead.city,
-	//       lead.googleUrl,
-	//       lead.bizWebsite,
-	//       lead.ratingText,
-	//       lead.stars,
-	//       lead.numberOfReviews,
-	//       lead.about,
-	//       lead.facebook || "N/A",
-	//       lead.linkedIn || "N/A",
-	//       lead.instagram || "N/A",
-	//       lead.youtube || "N/A",
-	//       lead.logoUrl || "N/A",
-	//       lead.images || "N/A",
-	//     ]),
-	//   ];
-
-	//   const csvContent = `data:text/csv;charset=utf-8,${csvRows
-	//     .map((row) => row.join(","))
-	//     .join("\n")}`;
-	//   const link = document.createElement("a");
-	//   link.href = encodeURI(csvContent);
-	//   link.download = "leads.csv";
-	//   link.click();
-	// };
-
-	// const exportToExcel = () => {
-	// 	const worksheet = XLSX.utils.json_to_sheet(leads);
-	// 	const workbook = XLSX.utils.book_new();
-	// 	XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-	// 	XLSX.writeFile(workbook, "leads.xlsx");
-	// };
 	const exportToExcel = () => {
 		const ws = XLSX.utils.json_to_sheet(filteredLeads);
 		const wb = XLSX.utils.book_new();
@@ -204,56 +143,6 @@ export default function Page() {
 		XLSX.writeFile(wb, "leads.xlsx");
 	};
 
-	// 	const doc = new jsPDF();
-
-	// 	if (leads.length === 0) return;
-
-	// 	// Get base columns (excluding nested object)
-	// 	const baseColumns = Object.keys(leads[0]).filter((col) => col !== "socialLinks");
-
-	// 	// Flattened socialLinks keys (if present)
-	// 	const socialLinkKeys = leads[0].socialLinks
-	// 		? Object.keys(leads[0].socialLinks)
-	// 		: ["facebook", "linkedin", "instagram", "youtube"];
-
-	// 	// Prepare headers
-	// 	const headers = [
-	// 		...baseColumns.map((col) => ({ content: col })),
-	// 		...socialLinkKeys.map((key) => ({ content: `socialLinks.${key}` })),
-	// 	];
-
-	// 	// Prepare row data
-	// 	const rows = leads.map((lead) => {
-	// 		const flatRow = [];
-
-	// 		// Add base fields
-	// 		for (const key of baseColumns) {
-	// 			const value = lead[key];
-
-	// 			if (value && typeof value === "object") {
-	// 				flatRow.push(Object.values(value).join(", "));
-	// 			} else {
-	// 				flatRow.push(value ?? "");
-	// 			}
-	// 		}
-
-	// 		// Add socialLinks fields
-	// 		for (const key of socialLinkKeys) {
-	// 		const linkValue = lead.socialLinks?.[key as keyof typeof lead.socialLinks] ?? "";
-	// 			flatRow.push(linkValue);
-	// 		}
-
-	// 		return flatRow;
-	// 	});
-
-	// 	autoTable(doc, {
-	// 		head: [headers],
-	// 		body: rows,
-	// 		styles: { fontSize: 8 }, // optional for better fit
-	// 	});
-
-	// 	doc.save("leads.pdf");
-	// };
 	const exportToPDF = () => {
 		const doc = new jsPDF();
 		doc.setFontSize(16);
@@ -341,7 +230,12 @@ export default function Page() {
 						sx={{ maxWidth: "400px" }}
 					/>
 
-					<Button onClick={exportToCSV} className="sm:flex" variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
+					<Button
+						onClick={exportToCSV}
+						className="sm:flex"
+						variant="contained"
+						sx={{ ml: 2, backgroundColor: "#0fb9d8" }}
+					>
 						Export To CSV
 					</Button>
 					<Button onClick={exportToPDF} variant="contained" sx={{ ml: 2, backgroundColor: "#0fb9d8" }}>
@@ -373,7 +267,7 @@ export default function Page() {
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Name</TableCell>
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Email</TableCell>
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
-									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >Category</TableCell>
+									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Category</TableCell>
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Search Category</TableCell>
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Phone</TableCell>
 									<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Google Map</TableCell>
@@ -407,7 +301,9 @@ export default function Page() {
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.email ? lead.email : "No Email"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{lead.email ? lead.email : "No Email"}
+										</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.address ? (
 												<Tooltip title={lead.address}>
@@ -419,8 +315,12 @@ export default function Page() {
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.category ? lead.category : "No Category"}</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{lead.projectCategory ? lead.projectCategory : "No Project Category"}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{lead.category ? lead.category : "No Category"}
+										</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{lead.projectCategory ? lead.projectCategory : "No Project Category"}
+										</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{lead.phone ? (
 												<a

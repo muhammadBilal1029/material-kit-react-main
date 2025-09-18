@@ -28,10 +28,9 @@ import { useUser } from "@/hooks/use-user";
 // import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from "@/components/dashboard/Leads/leads-table";
 
-
-const socket = io("https://gofernets.run.place",{
-  path: "/unipullar/socket.io",
-  transports: ["websocket", "polling"], // optional but good
+const socket = io("https://gofernets.run.place", {
+	path: "/unipullar/socket.io",
+	transports: ["websocket", "polling"], // optional but good
 });
 export default function Page(): React.JSX.Element {
 	const router = useRouter();
@@ -55,7 +54,7 @@ export default function Page(): React.JSX.Element {
 		a.click();
 		URL.revokeObjectURL(url);
 	};
-	
+
 	const exportToExcel = () => {
 		const ws = XLSX.utils.json_to_sheet(leads);
 		const wb = XLSX.utils.book_new();
@@ -63,7 +62,6 @@ export default function Page(): React.JSX.Element {
 		XLSX.writeFile(wb, "leads.xlsx");
 	};
 
-	
 	const exportToPDF = () => {
 		const doc = new jsPDF();
 		doc.setFontSize(16);
@@ -150,7 +148,8 @@ export default function Page(): React.JSX.Element {
 				}
 
 				if (isMounted) {
-					setLeads(data.data);
+					const filteredLeads = data.data.filter((lead: Customer) => lead.storeName != "");
+					setLeads(filteredLeads);
 					setLoading(false);
 				}
 
@@ -166,7 +165,8 @@ export default function Page(): React.JSX.Element {
 		// Socket listener
 		socket.on("lead", (newLead: Customer) => {
 			console.log("📢 New lead received:", newLead);
-			setLeads((prevLeads) => [newLead, ...prevLeads]);
+			const filteredLeads = newLead.filter((lead: Customer) => lead.storeName != "");
+			setLeads((prevLeads) => [filteredLeads, ...prevLeads]);
 		});
 
 		// Cleanup
@@ -180,8 +180,8 @@ export default function Page(): React.JSX.Element {
 		const filtered = !searchTerm.trim()
 			? leads
 			: leads.filter((lead) =>
-				Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
-			);
+					Object.values(lead).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
+				);
 		if (rowsPerPages === -1) return filtered;
 		return filtered.slice(pages * rowsPerPages, pages * rowsPerPages + rowsPerPages);
 	}, [searchTerm, leads, pages, rowsPerPages]);
