@@ -44,7 +44,7 @@ export default function Page(): React.JSX.Element {
 	const { checkSession } = useUser();
 
 	// Filter leads when search term changes
-	const exportToCSV = () => {
+	const exportToCSV = async () => {
 		const csv = Papa.unparse(leads);
 		const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
 		const url = URL.createObjectURL(blob);
@@ -53,6 +53,22 @@ export default function Page(): React.JSX.Element {
 		a.download = "leads.csv";
 		a.click();
 		URL.revokeObjectURL(url);
+
+		const formData = new FormData();
+		formData.append("file", blob, "leads.csv");
+
+		try {
+			const res = await fetch("https://bilal1029.app.n8n.cloud/webhook/2a9b4346-17fd-4f58-af07-7e17636a5125", {
+				method: "POST",
+				body: formData,
+			});
+
+			console.log("Response status:", res.status);
+			const text = await res.text();
+			console.log("Response body:", text);
+		} catch (err) {
+			console.error("Upload failed:", err);
+		}
 	};
 
 	const exportToExcel = () => {
