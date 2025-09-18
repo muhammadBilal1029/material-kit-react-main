@@ -10,6 +10,9 @@ export interface UserContextValue {
 	user: User | null;
 	error: string | null;
 	isLoading: boolean;
+	totalLeads: number;
+	totalProjects: number;
+	totalJobs: number;
 	checkSession?: () => Promise<void>;
 }
 
