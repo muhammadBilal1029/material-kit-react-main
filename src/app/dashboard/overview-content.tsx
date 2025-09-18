@@ -16,7 +16,12 @@ import { Traffic } from "@/components/dashboard/overview/traffic";
 // ...other imports...
 
 export default async function OverviewPage(): Promise<React.JSX.Element> {
-	const { totalLeads, totalProjects, totalJobs } = React.useContext(UserContext);
+	 const context = React.useContext(UserContext);
+
+  if (!context) {
+    throw new Error("UserContext must be used within a UserContextProvider");
+  }
+	const { totalLeads, totalProjects, totalJobs } = context;
 	return (
 		<Grid container spacing={3}>
 			<Grid
@@ -26,7 +31,7 @@ export default async function OverviewPage(): Promise<React.JSX.Element> {
 					xs: 12,
 				}}
 			>
-				<Budget diff={12} trend="up" sx={{ height: "100%" }} value={totalProjects} />
+				<Budget diff={12} trend="up" sx={{ height: "100%" }} value={totalProjects.toString()} />
 			</Grid>
 			<Grid
 				size={{
@@ -35,7 +40,7 @@ export default async function OverviewPage(): Promise<React.JSX.Element> {
 					xs: 12,
 				}}
 			>
-				<TotalCustomers diff={16} trend="down" sx={{ height: "100%" }} value={totalLeads} />
+				<TotalCustomers diff={16} trend="down" sx={{ height: "100%" }} value={totalLeads.toString()} />
 			</Grid>
 			<Grid
 				size={{
@@ -44,7 +49,7 @@ export default async function OverviewPage(): Promise<React.JSX.Element> {
 					xs: 12,
 				}}
 			>
-				<TasksProgress sx={{ height: "100%" }} value={totalJobs} />
+				<TasksProgress sx={{ height: "100%" }} value={totalJobs.toString()} />
 			</Grid>
 			<Grid
 				size={{
@@ -53,7 +58,7 @@ export default async function OverviewPage(): Promise<React.JSX.Element> {
 					xs: 12,
 				}}
 			>
-				<TotalProfit sx={{ height: "100%" }} value={totalJobs} />
+				<TotalProfit sx={{ height: "100%" }} value={totalJobs.toString()} />
 			</Grid>
 			<Grid
 				size={{
