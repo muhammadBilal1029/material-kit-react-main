@@ -28,6 +28,11 @@ import { useUser } from "@/hooks/use-user";
 // import { LeadsFilters } from '@/components/dashboard/Leads/leads-filters';
 import { Customer, LeadsTable } from "@/components/dashboard/Leads/leads-table";
 
+
+const socket = io("https://gofernets.run.place",{
+  path: "/unipullar/socket.io",
+  transports: ["websocket", "polling"], // optional but good
+});
 export default function Page(): React.JSX.Element {
 	const router = useRouter();
 	//

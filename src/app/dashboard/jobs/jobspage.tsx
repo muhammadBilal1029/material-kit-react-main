@@ -20,6 +20,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { toast } from "react-hot-toast";
 import { io } from "socket.io-client";
 
+const socket = io("https://gofernets.run.place",{
+  path: "/unipullar/socket.io",
+  transports: ["websocket", "polling"], // optional but good
+});
 
 export default function Page(): React.JSX.Element {
   const router = useRouter();

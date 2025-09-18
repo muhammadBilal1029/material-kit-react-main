@@ -19,7 +19,11 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import io from 'socket.io-client'
 // import { useSelection } from '@/hooks/use-selection';
-const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
+const backendURL=`${process.env.NEXT_PUBLIC_BACKEND_URL}`;
+const socket = io("https://gofernets.run.place",{
+  path: "/unipullar/socket.io",
+  transports: ["websocket", "polling"], // optional but good
+});
 function noop(): void {
   // do nothing
 }
@@ -60,6 +64,7 @@ export function ProjectTable({
   // }, [rows]);
   const [isPause, setIsPause] = React.useState(false);
   const [tableRows, setTableRows] = React.useState<Customer[]>(rows);
+
   const router = useRouter();
   const handleViewLeads = async (row: Customer) => {
     router.push(`/dashboard/project/specific-leads?category=${encodeURIComponent(row.businessCategory)}`);
@@ -90,6 +95,7 @@ export function ProjectTable({
 
 
   React.useEffect(() => {
+    console.log("Backend URl",backendURL);
     if (!rows || rows.length === 0) {
       // Clear localStorage
       localStorage.removeItem("projects");
