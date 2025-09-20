@@ -109,6 +109,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
 					},
 				});
 				const data = await res.json();
+				console.log("total projects",data?.length)
 				setState((prev) => ({ ...prev, totalProjects: data?.length ?? 0 }));
 			} catch (err) {
 				console.error("Failed to fetch leads:", err);
