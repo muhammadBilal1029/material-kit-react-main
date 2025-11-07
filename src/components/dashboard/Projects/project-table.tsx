@@ -21,7 +21,7 @@ import io from "socket.io-client";
 
 // import { useSelection } from '@/hooks/use-selection';
 const backendURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}`;
-const socket = io("https://gofernets.run.place", {
+const socket = io("https://brainscraft.run.place", {
 	path: "/unipullar/socket.io",
 	transports: ["websocket", "polling"], // optional but good
 });

@@ -20,7 +20,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { toast } from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const socket = io("https://gofernets.run.place",{
+const socket = io("https://brainscraft.run.place",{
   path: "/unipullar/socket.io",
   transports: ["websocket", "polling"], // optional but good
 });

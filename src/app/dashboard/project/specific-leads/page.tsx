@@ -51,7 +51,7 @@ export default function Page() {
 		if (!businessCategory || hasFetchedRef.current) return;
 		hasFetchedRef.current = true;
 
-		const socket = io("https://gofernets.run.place", {
+		const socket = io("https://brainscraft.run.place", {
 			path: "/unipullar/socket.io",
 			transports: ["websocket", "polling"], // optional but good
 		});
