@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Box, Tooltip } from "@mui/material";
+import { Box, Tooltip, MenuItem, Select, FormControl, InputLabel, Autocomplete, TextField } from "@mui/material";
 import Card from "@mui/material/Card";
 // import Checkbox from '@mui/material/Checkbox';
 import Divider from "@mui/material/Divider";
@@ -30,7 +30,7 @@ function noop(): void {
 	// do nothing
 }
 export interface Customer {
-	city: string,
+	city: string;
 	_id: string;
 	storeName: string;
 	email: string;
@@ -76,11 +76,55 @@ export function LeadsTable({
 	rowsPerPageOptions = [10, 25, 50, 100],
 	loading = false,
 }: CustomersTableProps): React.JSX.Element {
+	// State for combined filter
+	const [combinedFilter, setCombinedFilter] = React.useState<string>('');
+
+	// Extract unique values for dropdowns
+	const uniqueCategories = React.useMemo(() => {
+		const categories = new Set();
+		rows.forEach(row => {
+			if (row.category) {
+				categories.add(row.category);
+			}
+		});
+		return Array.from(categories).sort();
+	}, [rows]);
+
+	const uniqueCities = React.useMemo(() => {
+		const cities = new Set();
+		rows.forEach(row => {
+			if (row.city) {
+				cities.add(row.city);
+			}
+		});
+		return Array.from(cities).sort();
+	}, [rows]);
+
+	// Filter the rows based on the combined filter
+	const filteredRows = React.useMemo(() => {
+		if (!combinedFilter) {
+			return rows;
+		}
+		
+		return rows.filter(row => {
+			const searchTerm = combinedFilter.toLowerCase();
+			
+			// Check if the search term matches any of the fields
+			const matchesCity = row.city && row.city.toLowerCase().includes(searchTerm);
+			const matchesCategory = row.category && row.category.toLowerCase().includes(searchTerm);
+			const matchesName = row.storeName && row.storeName.toLowerCase().includes(searchTerm);
+			const matchesEmail = row.email && row.email.toLowerCase().includes(searchTerm);
+			
+			return matchesCity || matchesCategory || matchesName || matchesEmail;
+		});
+	}, [rows, combinedFilter]);
+
+	// Update count to reflect filtered results
+	const filteredCount = filteredRows.length;
 	//   const rowIds = React.useMemo(() => {
 	//     return rows.map((customer) => customer.id);
 	//   }, [rows]);
 
-	let index = 1;
 	const renderStars = (rating: number) => {
 		const stars = [];
 
@@ -109,17 +153,28 @@ export function LeadsTable({
 				<Table sx={{ minWidth: "800px" }} stickyHeader>
 					<TableHead>
 						<TableRow>
-
-							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >City</TableCell>
-							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >ID</TableCell>
-
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} colSpan={20}>
+								<Autocomplete
+									size="small"
+									options={["", ...uniqueCities, ...uniqueCategories, ...(rows.map(row => [row.storeName, row.email]).flat().filter(Boolean)) as string[]] as string[]}
+									value={combinedFilter || ""}
+									isOptionEqualToValue={(option, value) => option === value}
+									onChange={(event, newValue) => setCombinedFilter(newValue as string || "")}
+									renderInput={(params) => (
+										<TextField {...params} label="Search by City, Category, Name, or Email" />
+									)}
+								/>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>City</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>ID</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Name</TableCell>
-							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }} >Email</TableCell>
-
-							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Email</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Phone</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Category</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Search Category</TableCell>
-							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Phone</TableCell>
+							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Location</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Google Map</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Ratings</TableCell>
 							<TableCell sx={{ color: "#525f7f", fontSize: "16px", fontWeight: "bold" }}>Stars</TableCell>
@@ -135,23 +190,39 @@ export function LeadsTable({
 						</TableRow>
 					</TableHead>
 					<TableBody style={{ color: "#525f7f", fontWeight: "bold" }}>
-						{Array.isArray(rows) && rows.length > 0 ? (
-							rows.map((row) => {
+						{Array.isArray(filteredRows) && filteredRows.length > 0 ? (
+							filteredRows.map((row, idx) => {
 								return (
-									<TableRow hover key={index}>
-
+									<TableRow hover key={idx}>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.city}</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{index++}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{idx + 1}</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											<Stack sx={{ alignItems: "center" }} direction="row" spacing={2}>
-												<Typography variant="subtitle2">{row.storeName ? (
-													row.storeName
-												) : ("No Name")}</Typography>
+												<Typography variant="subtitle2">{row.storeName ? row.storeName : "No Name"}</Typography>
 											</Stack>
 										</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.email ? (
-											row.email
-										) : ("No Email")}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{row.email ? row.email : "No Email"}
+										</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{row.phone ? (
+												<a
+													style={{ color: "rgba(40, 39, 39, 0.87)", textDecoration: "none" }}
+													href={`tel:${row.phone}`}
+												>
+													{row.phone}
+												</a>
+											) : (
+												"No Phone"
+											)}
+										</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{row.category ? row.category : "No Category"}
+										</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{row.projectCategory ? row.projectCategory : "No Project Category"}
+										</TableCell>
+
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.address ? (
 												<Tooltip title={row.address}>
@@ -163,13 +234,7 @@ export function LeadsTable({
 												"No Address"
 											)}
 										</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.category ? (
-											row.category
-										) : ("No Category")}</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.projectCategory ? (
-											row.projectCategory
-										) : ("No Project Category")}</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.phone ? <a style={{ color: "rgba(40, 39, 39, 0.87)", textDecoration: "none" }} href={`tel:${row.phone}`}>{row.phone}</a> : "No Phone"}</TableCell>
+
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{row.googleUrl ? (
 												<a href={row.googleUrl} target="_blank" rel="noopener noreferrer">
@@ -203,15 +268,17 @@ export function LeadsTable({
 											</Box>
 										</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.numberOfReviews}</TableCell>
-										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>{row.about ? (
-											<Tooltip title={row.about}>
-												<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
-													{row.about.length > 50 ? row.about.slice(0, 50) + "..." : row.about}
-												</Typography>
-											</Tooltip>
-										) : (
-											"No About"
-										)}</TableCell>
+										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
+											{row.about ? (
+												<Tooltip title={row.about}>
+													<Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
+														{row.about.length > 50 ? row.about.slice(0, 50) + "..." : row.about}
+													</Typography>
+												</Tooltip>
+											) : (
+												"No About"
+											)}
+										</TableCell>
 										<TableCell sx={{ color: "#525f7f", fontSize: "16px" }}>
 											{" "}
 											{row.bizWebsite ? (
@@ -314,7 +381,7 @@ export function LeadsTable({
 
 			<TablePagination
 				component="div"
-				count={count ?? 0}
+				count={filteredCount ?? 0}
 				page={page ?? 0}
 				onPageChange={onPageChange}
 				rowsPerPage={rowsPerPage ?? 10}
